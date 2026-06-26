@@ -107,3 +107,51 @@ input[type="number"]::-webkit-outer-spin-button {
 #login-overlay.hidden {
     display: none;
 }
+
+/* ===== Toast Notifications ===== */
+#toast-container {
+    pointer-events: none;
+}
+.toast-item {
+    pointer-events: auto;
+    animation: toastIn 0.35s ease-out forwards;
+    backdrop-filter: blur(4px);
+}
+.toast-item.toast-out {
+    animation: toastOut 0.3s ease-in forwards;
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(50px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to { opacity: 0; transform: translateX(50px) scale(0.9); }
+}
+
+/* ===== Overhead Type Segmented Toggle ===== */
+.overhead-type-btn {
+    color: #64748b;
+    background: transparent;
+}
+.overhead-type-btn.active {
+    background: #ffffff;
+    color: #1d4ed8;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.overhead-type-btn:hover:not(.active) {
+    color: #334155;
+}
+
+/* ===== Mini Spinner (used inside buttons) ===== */
+.btn-mini-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
