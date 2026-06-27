@@ -323,40 +323,53 @@
                     </div>
                 </div>
 
-                <!-- SUB-TAB PENJUALAN -->
+                <!-- SUB-TAB PENJUALAN (TABLE MASSAL) -->
                 <div id="subtab-penjualan" class="input-subtab hidden">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-4xl mx-auto">
-                        <h3 class="font-bold text-lg text-green-800 border-b pb-3 mb-5 flex items-center gap-2"><span class="bg-green-100 p-1.5 rounded-lg text-green-600">🛒</span> Input Penjualan</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-600 mb-1">Pilih Menu</label>
-                                <select id="jual-menu" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white text-sm"></select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                            <div class="flex flex-wrap items-center gap-3">
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-600 mb-1">Bulan</label>
-                                    <select id="jual-bulan" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white text-sm"></select>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">Filter Kategori</label>
+                                    <select id="jual-filter-kategori" class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none w-40" onchange="renderTablePenjualanInput()">
+                                        <option value="all">Semua Kategori</option>
+                                    </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-600 mb-1">Tahun</label>
-                                    <select id="jual-tahun" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none bg-white text-sm"></select>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">Bulan</label>
+                                    <select id="jual-bulan" class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none"></select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 mb-1">Tahun</label>
+                                    <select id="jual-tahun" class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none"></select>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-600 mb-1">Qty Terjual (Porsi)</label>
-                                <input type="number" id="jual-qty" placeholder="0" min="1" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-600 mb-1">Harga Jual Aktual</label>
-                                <div class="flex shadow-sm rounded-lg">
-                                    <span class="inline-flex items-center px-4 text-sm text-gray-600 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg font-bold">Rp</span>
-                                    <input type="text" id="jual-harga" placeholder="28.000" class="flex-1 w-full p-2.5 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-400 outline-none transition-all" oninput="formatRupiahInput(this)" />
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">* Default diisi dari harga jual menu, bisa diubah.</p>
+                            <div class="flex gap-2">
+                                <button onclick="downloadTemplatePenjualan()" class="bg-white text-blue-700 border border-blue-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-50 shadow-sm transition-colors">📄 Template</button>
+                                <button onclick="document.getElementById('import-penjualan-file').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow flex items-center gap-2 transition-transform hover:-translate-y-0.5"><span>📤</span> Import Excel</button>
+                                <button onclick="exportPenjualanToExcel()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 shadow-sm transition-colors">📥 Export</button>
+                                <input type="file" id="import-penjualan-file" accept=".xlsx, .xls" class="hidden" onchange="initiateImportPenjualan(event)" />
                             </div>
                         </div>
-                        <div class="mt-6 flex justify-end">
-                            <button onclick="simpanPenjualan()" class="role-senior hidden bg-green-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-green-700 shadow-lg transition-transform hover:-translate-y-0.5">Simpan Penjualan</button>
+
+                        <div class="overflow-x-auto border border-gray-200 rounded-xl">
+                            <table class="w-full text-left text-sm whitespace-nowrap" id="table-penjualan-input">
+                                <thead>
+                                    <tr class="bg-gray-100 text-gray-700 border-b">
+                                        <th class="p-3 font-bold">Menu</th>
+                                        <th class="p-3 font-bold">Kategori</th>
+                                        <th class="p-3 font-bold">Sub Kategori</th>
+                                        <th class="p-3 font-bold text-center w-28">Qty Terjual</th>
+                                        <th class="p-3 font-bold text-right w-40">Harga Jual</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-penjualan-input-body"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button onclick="simpanPenjualanMassal()" class="role-senior hidden bg-green-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-green-700 shadow-lg transition-transform hover:-translate-y-0.5 flex items-center gap-2">
+                                💾 Simpan Semua Penjualan
+                            </button>
                         </div>
                     </div>
                 </div>
