@@ -237,7 +237,7 @@ async function fetchUserRoleAndSettings(user) {
     hideLoading();
 }
 
-// ---------- LOAD SETTINGS DARI DATABASE (DIPANGGIL SETIAP KALI DIBUTUHKAN) ----------
+// ---------- LOAD SETTINGS DARI DATABASE ----------
 async function loadAppSettings() {
     try {
         const { data, error } = await supabaseClient
@@ -284,12 +284,6 @@ async function simpanSettings() {
     if (btnText) btnText.innerHTML = '<span class="btn-mini-spinner"></span>Menyimpan...';
     showLoading();
 
-    // PENTING: pakai UPDATE per-baris (bukan upsert/insert).
-    // Tabel app_settings di Supabase hanya mengizinkan UPDATE lewat RLS policy
-    // (tidak ada izin INSERT). Baris hpp_limit / overhead_type / overhead_value
-    // WAJIB sudah ada lebih dulu di database (cukup sekali, lihat instruksi seed
-    // SQL yang diberikan saat setup). Setelah baris ada, UPDATE ini akan selalu
-    // berhasil tanpa perlu izin INSERT sama sekali.
     const updates = [
         { key: 'hpp_limit', value: String(limitVal) },
         { key: 'overhead_type', value: ovhType },
@@ -321,8 +315,6 @@ async function simpanSettings() {
         return;
     }
 
-    // Reload settings langsung dari database (bukan dari memori) untuk
-    // memastikan apa yang ditampilkan ke user adalah data yang benar-benar tersimpan.
     await loadAppSettings();
     updateUIByRole();
     showToast('Pengaturan biaya overhead & batas HPP berhasil disimpan ke database untuk semua pengguna.', 'success');
@@ -368,12 +360,12 @@ function updateUIByRole() {
     }
 
     // ---- Tab mapping ----
-    const allTabs = ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input-hpp', 'tab-kategori', 'tab-settings'];
+    const allTabs = ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'];
     const tabMap = {
         staff: ['tab-direktori', 'tab-summary'],
         admin: ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku'],
-        senior_bar: ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input-hpp', 'tab-kategori'],
-        head_bar: ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input-hpp', 'tab-kategori', 'tab-settings']
+        senior_bar: ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input', 'tab-kategori', 'tab-data-penjualan'],
+        head_bar: ['tab-direktori', 'tab-summary', 'tab-dashboard', 'tab-bahan-baku', 'tab-input', 'tab-kategori', 'tab-data-penjualan', 'tab-settings']
     };
     const allowed = tabMap[role] || tabMap.staff;
 
@@ -399,8 +391,9 @@ function updateUIByRole() {
         'tab-summary': '📊 Summary HPP',
         'tab-dashboard': '📈 Dashboard',
         'tab-bahan-baku': '📦 Bahan Baku',
-        'tab-input-hpp': '✍️ Input Resep',
+        'tab-input': '✍️ Input Data',
         'tab-kategori': '🏷️ Kategori',
+        'tab-data-penjualan': '📋 Data Penjualan',
         'tab-settings': '⚙️ Settings'
     };
     navbar.innerHTML = '';
@@ -470,7 +463,7 @@ function updateUIByRole() {
         userStatus.className = 'text-xs font-bold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full shadow-inner border border-gray-200';
     }
 
-    // ---- ISI SETTINGS FORM DARI appSettings (yang sudah di-load dari DB) ----
+    // ---- ISI SETTINGS FORM DARI appSettings ----
     document.getElementById('setting-hpp-limit').value = appSettings.hpp_limit;
     setOverheadType(appSettings.overhead_type);
     if (appSettings.overhead_type === 'nominal') {
@@ -481,15 +474,21 @@ function updateUIByRole() {
     }
     updateOverheadStatusBadge();
 
+    // ---- Inisialisasi dropdown bulan/tahun ----
+    initBulanTahunDropdowns();
+    loadMenuDropdownPenjualan();
+
     // ---- Load data untuk tab yang aktif ----
     if (document.getElementById('tab-bahan-baku').classList.contains('active')) {
         bbCurrentPage = 1;
         loadBahanBaku();
     }
-    if (document.getElementById('tab-input-hpp').classList.contains('active')) {
+    if (document.getElementById('tab-input').classList.contains('active')) {
         loadDropdownBahanBaku('baru');
+        // Set default sub tab ke HPP
+        switchInputSubTab('hpp');
     }
-    // Selalu refresh data resep (menggunakan overhead terbaru)
+    // Selalu refresh data resep
     loadDirektori();
 
     console.log('=== updateUIByRole selesai, role sekarang:', role);
@@ -528,9 +527,14 @@ function switchTab(tabId) {
 
     // ---- Load data sesuai tab ----
     if (tabId === 'tab-bahan-baku') { bbCurrentPage = 1; loadBahanBaku(); }
-    if (tabId === 'tab-input-hpp') loadDropdownBahanBaku('baru');
+    if (tabId === 'tab-input') { loadDropdownBahanBaku('baru'); switchInputSubTab('hpp'); }
     if (tabId === 'tab-direktori' || tabId === 'tab-summary' || tabId === 'tab-dashboard') loadDirektori();
     if (tabId === 'tab-summary') renderTableSummary();
+    if (tabId === 'tab-data-penjualan') loadDataPenjualan();
+    if (tabId === 'tab-dashboard') {
+        // Update engineering setelah loadDirektori selesai
+        setTimeout(updateDashboardEngineering, 500);
+    }
 }
 
 // ==================== FUNGSI BAHAN BAKU ====================
@@ -1012,7 +1016,7 @@ function updateKalkulasiHPP(mode) {
     const totalBahanPokok = dataArr.reduce((sum, item) => sum + item.subtotal, 0);
     const costPerPorsiBase = (totalBahanPokok / yieldPorsi);
 
-    // ---- HITUNG OVERHEAD BERDASARKAN SETTINGS ----
+    // ---- HITUNG OVERHEAD ----
     const overhead = appSettings.overhead_type === 'persen' 
         ? (costPerPorsiBase * (appSettings.overhead_value / 100)) 
         : appSettings.overhead_value;
@@ -1030,9 +1034,6 @@ function updateKalkulasiHPP(mode) {
     const elHPP = document.getElementById(prefix + 'persentase');
     elHPP.innerText = hppValue.toFixed(2) + '%';
     elHPP.className = hppValue > appSettings.hpp_limit ? 'font-black text-lg text-red-500' : 'font-black text-lg text-emerald-400';
-
-    // ---- Tampilkan overhead di form (opsional) ----
-    // Tidak ditampilkan di input form, tapi akan muncul di recipe card
 }
 
 // ---------- SIMPAN RESEP ----------
@@ -1136,7 +1137,6 @@ async function loadDirektori() {
             margin: menu.harga_jual - hppPerPorsi,
             hppPersen: menu.harga_jual > 0 ? (hppPerPorsi / menu.harga_jual) * 100 : 0,
             komposisiHTML,
-            // Tambahkan info overhead untuk ditampilkan di card
             overhead: overhead,
             overheadType: appSettings.overhead_type,
             overheadValue: appSettings.overhead_value
@@ -1146,6 +1146,11 @@ async function loadDirektori() {
     renderCatalogDirektori();
     renderTableSummary();
     renderDashboardAnalitika();
+
+    // Update engineering jika tab dashboard aktif
+    if (document.getElementById('tab-dashboard').classList.contains('active')) {
+        updateDashboardEngineering();
+    }
 }
 
 // ---------- RENDER DIRECTORY (RECIPE CARD) ----------
@@ -1182,7 +1187,6 @@ function renderCatalogDirektori() {
                 let hppColor = menu.hppPersen > appSettings.hpp_limit ? 'text-red-500' : 'text-emerald-600';
                 let marginColor = menu.margin < 0 ? 'text-red-500' : 'text-emerald-600';
 
-                // ---- TEKS OVERHEAD ----
                 let ovhText = '';
                 if (menu.overheadValue > 0) {
                     if (menu.overheadType === 'persen') {
@@ -1697,6 +1701,326 @@ function eksekusiImportResep(mode) {
         }
     };
     reader.readAsArrayBuffer(fileImportTertunda);
+}
+
+// ==================== FUNGSI PENJUALAN ====================
+
+// Inisialisasi dropdown bulan dan tahun
+function initBulanTahunDropdowns() {
+    const bulanSelects = ['jual-bulan', 'filter-data-bulan', 'dash-filter-bulan'];
+    const bulanNames = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    bulanSelects.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = '<option value="">Pilih Bulan</option>';
+        bulanNames.forEach((name, i) => {
+            el.innerHTML += `<option value="${i+1}">${name}</option>`;
+        });
+        // Set default untuk jual-bulan ke bulan berjalan
+        if (id === 'jual-bulan') {
+            el.value = new Date().getMonth() + 1;
+        }
+    });
+
+    const tahunSelects = ['jual-tahun', 'filter-data-tahun', 'dash-filter-tahun'];
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({length: 10}, (_, i) => currentYear - i);
+    tahunSelects.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = '<option value="">Pilih Tahun</option>';
+        years.forEach(y => {
+            el.innerHTML += `<option value="${y}">${y}</option>`;
+        });
+        if (id === 'jual-tahun' || id === 'dash-filter-tahun') el.value = currentYear;
+    });
+}
+
+// Load daftar menu untuk dropdown penjualan
+async function loadMenuDropdownPenjualan() {
+    const { data, error } = await supabaseClient.from('resep').select('id, nama, harga_jual').order('nama');
+    if (error) return;
+    const selects = ['jual-menu', 'filter-data-menu'];
+    selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = id === 'filter-data-menu' ? '<option value="all">Semua Menu</option>' : '<option value="">-- Pilih Menu --</option>';
+        data.forEach(m => {
+            el.innerHTML += `<option value="${m.id}" data-harga="${m.harga_jual}">${m.nama}</option>`;
+        });
+    });
+    // Event listener untuk isi otomatis harga jual
+    const jualMenu = document.getElementById('jual-menu');
+    if (jualMenu) {
+        jualMenu.addEventListener('change', function() {
+            const harga = this.options[this.selectedIndex]?.dataset?.harga || 0;
+            const inputHarga = document.getElementById('jual-harga');
+            if (inputHarga) {
+                inputHarga.value = harga ? new Intl.NumberFormat('id-ID').format(harga) : '';
+            }
+        });
+        // Trigger sekali saat load
+        const harga = jualMenu.options[jualMenu.selectedIndex]?.dataset?.harga || 0;
+        const inputHarga = document.getElementById('jual-harga');
+        if (inputHarga) {
+            inputHarga.value = harga ? new Intl.NumberFormat('id-ID').format(harga) : '';
+        }
+    }
+}
+
+// Simpan penjualan
+async function simpanPenjualan() {
+    if (!hasRole('senior_bar')) return alert('Akses ditolak.');
+    const resepId = document.getElementById('jual-menu').value;
+    const bulan = parseInt(document.getElementById('jual-bulan').value);
+    const tahun = parseInt(document.getElementById('jual-tahun').value);
+    const qty = parseInt(document.getElementById('jual-qty').value);
+    const hargaJual = getNilaiAsli(document.getElementById('jual-harga').value);
+
+    if (!resepId || !bulan || !tahun || !qty || !hargaJual) {
+        return alert('Lengkapi semua data penjualan!');
+    }
+
+    showLoading();
+    const { error } = await supabaseClient.from('penjualan').insert([
+        { resep_id: resepId, bulan, tahun, qty, harga_jual: hargaJual }
+    ]);
+    hideLoading();
+
+    if (error) {
+        alert('Gagal menyimpan penjualan: ' + error.message);
+    } else {
+        alert('Data penjualan berhasil disimpan!');
+        document.getElementById('jual-qty').value = '';
+        loadDataPenjualan();
+    }
+}
+
+// Load data penjualan ke tabel
+async function loadDataPenjualan() {
+    const bulan = document.getElementById('filter-data-bulan').value;
+    const tahun = document.getElementById('filter-data-tahun').value;
+    const menuId = document.getElementById('filter-data-menu').value;
+
+    let query = supabaseClient
+        .from('penjualan')
+        .select(`
+            id,
+            bulan,
+            tahun,
+            qty,
+            harga_jual,
+            resep:resep_id (id, nama, kategori, sub_kategori, harga_jual as harga_jual_resep)
+        `);
+
+    if (bulan && bulan !== 'all') query = query.eq('bulan', parseInt(bulan));
+    if (tahun && tahun !== 'all') query = query.eq('tahun', parseInt(tahun));
+    if (menuId && menuId !== 'all') query = query.eq('resep_id', parseInt(menuId));
+
+    const { data, error } = await query.order('tahun', { ascending: false }).order('bulan', { ascending: false });
+    if (error) {
+        console.error('Error load penjualan:', error);
+        return;
+    }
+
+    const tbody = document.getElementById('table-penjualan-body');
+    tbody.innerHTML = '';
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center p-8 text-gray-400 italic">Tidak ada data penjualan.</td></tr>`;
+        return;
+    }
+
+    const canDelete = hasRole('senior_bar');
+    const thCheck = document.querySelector('#table-penjualan thead th:first-child');
+    if (thCheck) {
+        if (canDelete) thCheck.classList.remove('hidden');
+        else thCheck.classList.add('hidden');
+    }
+
+    data.forEach(row => {
+        const menu = row.resep;
+        const total = row.qty * row.harga_jual;
+        const bulanName = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][row.bulan - 1] || row.bulan;
+
+        let html = '<tr class="hover:bg-gray-50 transition-colors">';
+        if (canDelete) {
+            html += `<td class="p-4 w-8 text-center"><input type="checkbox" class="penjualan-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-400" value="${row.id}" /></td>`;
+        }
+        html += `
+            <td class="p-4 font-bold text-gray-800">${menu?.nama || 'Menu dihapus'}</td>
+            <td class="p-4 text-gray-600">${menu?.kategori || '-'}</td>
+            <td class="p-4">${bulanName}</td>
+            <td class="p-4">${row.tahun}</td>
+            <td class="p-4 text-right font-semibold">${row.qty}</td>
+            <td class="p-4 text-right font-semibold text-blue-600">${formatRp(row.harga_jual)}</td>
+            <td class="p-4 text-right font-bold text-gray-800">${formatRp(total)}</td>
+            <td class="p-4 text-center">
+        `;
+        if (canDelete) {
+            html += `<button onclick="hapusPenjualan(${row.id})" class="text-red-500 hover:text-red-700 font-bold text-lg">✕</button>`;
+        } else {
+            html += `<span class="text-gray-300">-</span>`;
+        }
+        html += `</td></tr>`;
+        tbody.innerHTML += html;
+    });
+
+    const btnMassal = document.querySelector('[onclick="hapusPenjualanTerpilih()"]');
+    if (btnMassal) {
+        if (canDelete) btnMassal.classList.remove('hidden');
+        else btnMassal.classList.add('hidden');
+    }
+}
+
+// Hapus satu penjualan
+async function hapusPenjualan(id) {
+    if (!hasRole('senior_bar')) return alert('Akses ditolak.');
+    if (!confirm('Hapus data penjualan ini?')) return;
+    showLoading();
+    const { error } = await supabaseClient.from('penjualan').delete().eq('id', id);
+    hideLoading();
+    if (error) alert('Gagal hapus.');
+    else loadDataPenjualan();
+}
+
+// Hapus massal
+async function hapusPenjualanTerpilih() {
+    if (!hasRole('senior_bar')) return alert('Akses ditolak.');
+    const checkboxes = document.querySelectorAll('.penjualan-checkbox:checked');
+    if (checkboxes.length === 0) return alert('Pilih data yang akan dihapus.');
+    const ids = Array.from(checkboxes).map(cb => cb.value);
+    if (!confirm(`Hapus ${ids.length} data penjualan?`)) return;
+    showLoading();
+    const { error } = await supabaseClient.from('penjualan').delete().in('id', ids);
+    hideLoading();
+    if (error) alert('Gagal hapus massal.');
+    else loadDataPenjualan();
+}
+
+function toggleSelectAllPenjualan() {
+    const checked = document.getElementById('select-all-penjualan').checked;
+    document.querySelectorAll('.penjualan-checkbox').forEach(cb => cb.checked = checked);
+}
+
+// ==================== DASHBOARD ENGINEERING ====================
+
+async function updateDashboardEngineering() {
+    const bulan = document.getElementById('dash-filter-bulan').value;
+    const tahun = document.getElementById('dash-filter-tahun').value;
+
+    if (!bulan || !tahun) {
+        document.getElementById('dash-engineering-container').innerHTML = '<p class="text-gray-400 text-center py-10">Pilih bulan dan tahun untuk melihat data engineering.</p>';
+        return;
+    }
+
+    // Ambil semua penjualan untuk bulan/tahun terpilih
+    const { data: penjualanData, error } = await supabaseClient
+        .from('penjualan')
+        .select('resep_id, qty, harga_jual')
+        .eq('bulan', parseInt(bulan))
+        .eq('tahun', parseInt(tahun));
+
+    if (error) {
+        console.error('Error ambil penjualan:', error);
+        return;
+    }
+
+    // Kelompokkan per menu
+    const salesMap = {};
+    penjualanData.forEach(p => {
+        if (!salesMap[p.resep_id]) salesMap[p.resep_id] = { qty: 0, totalHarga: 0 };
+        salesMap[p.resep_id].qty += p.qty;
+        salesMap[p.resep_id].totalHarga += p.qty * p.harga_jual;
+    });
+
+    const menus = cachedResepSummaryData;
+
+    // Buat container per kategori
+    const kategoriMap = {};
+    menus.forEach(menu => {
+        const kat = menu.kategori || 'Uncategorized';
+        if (!kategoriMap[kat]) kategoriMap[kat] = [];
+        kategoriMap[kat].push(menu);
+    });
+
+    // Hitung rata-rata penjualan per kategori (hanya untuk menu yang terjual)
+    const avgSalesPerKat = {};
+    Object.keys(kategoriMap).forEach(kat => {
+        const menusInKat = kategoriMap[kat];
+        const totalQty = menusInKat.reduce((sum, m) => sum + (salesMap[m.id]?.qty || 0), 0);
+        const countSold = menusInKat.filter(m => salesMap[m.id] && salesMap[m.id].qty > 0).length;
+        avgSalesPerKat[kat] = countSold > 0 ? totalQty / countSold : 0;
+    });
+
+    // Tampilkan
+    const container = document.getElementById('dash-engineering-container');
+    container.innerHTML = '';
+
+    if (Object.keys(kategoriMap).length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-10">Belum ada kategori.</p>';
+        return;
+    }
+
+    // Loop kategori
+    Object.keys(kategoriMap).sort().forEach(kat => {
+        const menusInKat = kategoriMap[kat];
+        const avg = avgSalesPerKat[kat] || 0;
+
+        let html = `<div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+            <h4 class="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
+                <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">${kat}</span>
+                <span class="text-sm font-normal text-gray-500">Rata-rata penjualan: ${avg.toFixed(1)} porsi</span>
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        `;
+
+        menusInKat.forEach(menu => {
+            const sales = salesMap[menu.id];
+            const qty = sales?.qty || 0;
+            const isEngineering = (qty < avg * 0.5) && avg > 0;
+            const totalRevenue = sales?.totalHarga || 0;
+
+            html += `
+                <div class="bg-white p-4 rounded-xl shadow-sm border ${isEngineering ? 'border-red-300 bg-red-50' : 'border-gray-100'}">
+                    <div class="flex justify-between items-start">
+                        <span class="font-bold text-gray-700">${menu.nama}</span>
+                        ${isEngineering ? '<span class="text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">🔧 Engineering</span>' : ''}
+                    </div>
+                    <div class="mt-2 space-y-1 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Qty Terjual</span><span class="font-bold">${qty}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Total Revenue</span><span class="font-bold">${formatRp(totalRevenue)}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Margin / Porsi</span><span class="font-bold ${menu.margin < 0 ? 'text-red-600' : 'text-emerald-600'}">${formatRp(menu.margin)}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">% HPP</span><span class="font-bold ${menu.hppPersen > appSettings.hpp_limit ? 'text-red-500' : 'text-emerald-600'}">${menu.hppPersen.toFixed(1)}%</span></div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div></div>`;
+        container.innerHTML += html;
+    });
+}
+
+// ==================== SWITCH SUBTAB INPUT ====================
+
+function switchInputSubTab(tab) {
+    const hpp = document.getElementById('subtab-hpp');
+    const penjualan = document.getElementById('subtab-penjualan');
+    const btnHpp = document.getElementById('subtab-hpp-btn');
+    const btnPenjualan = document.getElementById('subtab-penjualan-btn');
+
+    if (tab === 'hpp') {
+        hpp.classList.remove('hidden');
+        penjualan.classList.add('hidden');
+        btnHpp.className = 'bg-white/30 backdrop-blur border border-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-white/30 transition-colors';
+        btnPenjualan.className = 'bg-white/20 backdrop-blur border border-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-white/30 transition-colors';
+    } else {
+        hpp.classList.add('hidden');
+        penjualan.classList.remove('hidden');
+        btnPenjualan.className = 'bg-white/30 backdrop-blur border border-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-white/30 transition-colors';
+        btnHpp.className = 'bg-white/20 backdrop-blur border border-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-white/30 transition-colors';
+        loadMenuDropdownPenjualan();
+    }
 }
 
 // ---------- EVENT LISTENER ----------
