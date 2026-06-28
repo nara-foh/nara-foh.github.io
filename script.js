@@ -20,6 +20,19 @@ let appSettings = {
   overhead_value: 0
 };
 
+
+// ---------- DEBOUNCE UTILITIES ----------
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+const debouncedLoadDirektori = debounce(() => loadDirektori(), 300);
+const debouncedRenderTableSummary = debounce(() => renderTableSummary(), 300);
+const debouncedLoadBahanBaku = debounce(() => loadBahanBaku(), 300);
+
 // ---------- HELPERS ----------
 const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(angka);
 
@@ -153,8 +166,27 @@ function toggleKebabMenu(event, menuId) {
     event.stopPropagation();
     const targetMenu = document.getElementById(menuId);
     const isHidden = targetMenu.classList.contains('hidden');
-    document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
-    if (isHidden) targetMenu.classList.remove('hidden');
+    
+    // Hide all first
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.add('hidden');
+        menu.classList.remove('fixed-dropdown');
+        menu.style.top = '';
+        menu.style.left = '';
+    });
+    
+    if (isHidden) {
+        targetMenu.classList.remove('hidden');
+        
+        // Calculate fixed position to escape overflow-x-auto
+        targetMenu.classList.add('fixed-dropdown');
+        const rect = event.currentTarget.getBoundingClientRect();
+        
+        // Position it below the button and align right
+        targetMenu.style.top = `${rect.bottom + window.scrollY + 4}px`;
+        targetMenu.style.right = `${window.innerWidth - rect.right}px`;
+        targetMenu.style.left = 'auto'; // ensure left is auto since we use right
+    }
 }
 
 // ---------- LOGIN ----------

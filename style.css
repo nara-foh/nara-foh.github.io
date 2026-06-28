@@ -178,3 +178,50 @@ input[type="number"]::-webkit-outer-spin-button {
 #table-penjualan-input input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
 }
+
+
+/* Standardized Buttons */
+.btn-primary {
+    background: linear-gradient(to right, #2563eb, #4f46e5);
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.btn-secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+.btn-danger {
+    background: linear-gradient(to right, #dc2626, #ef4444);
+    color: white;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Empty State */
+.empty-state-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 12px;
+    color: #9ca3af;
+}
+
+/* Dropdown Menu fixed positioning */
+.dropdown-menu.fixed-dropdown {
+    position: fixed;
+    z-index: 9999;
+}
