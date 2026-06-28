@@ -13,7 +13,7 @@
 <body>
 
     <!-- ==================== OVERLAY LOGIN ==================== -->
-    <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-blue-900 to-indigo-900 p-4 transition-opacity duration-500">
+    <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 p-4 transition-opacity duration-500">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative">
             <div class="text-center mb-6">
                 <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-4 rounded-2xl inline-block shadow-lg">
@@ -39,40 +39,40 @@
 
     <!-- ==================== KONTEN UTAMA ==================== -->
     <div id="app-wrapper" class="hidden">
-        <nav class="bg-white/80 backdrop-blur-lg shadow-sm p-4 sticky top-0 z-40 border-b border-gray-200 transition-all">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
                     <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-2 rounded-lg shadow-md">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     </div>
                     <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 tracking-tight">F&B PRO</h1>
                 </div>
-                <div class="hidden lg:flex items-center gap-6">
-                    <div class="flex gap-4 font-semibold text-gray-500 text-sm" id="navbar-tabs">
-                        <!-- Dinamis oleh JavaScript -->
-                    </div>
-                    <div class="flex items-center gap-3 border-l-2 border-gray-200 pl-6">
-                        <span id="user-status" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full shadow-inner border border-blue-200">🌟 Loading...</span>
-                        <button id="btn-logout" onclick="logoutAdmin()" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-5 py-1.5 rounded-full text-sm font-bold hover:shadow-lg hover:-translate-y-0.5 transition-all">Logout</button>
-                    </div>
+                <div class="hidden lg:flex items-center gap-2 h-full" id="navbar-tabs"></div>
+                <div class="flex items-center gap-3">
+                    <span id="user-status" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full shadow-inner border border-blue-200">🌟 Loading...</span>
+                    <button id="btn-logout" onclick="logoutAdmin()" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-1.5 rounded-full text-sm font-bold hover:shadow-lg hover:-translate-y-0.5 transition-all hidden lg:block">Logout</button>
+                    <button onclick="toggleMobileMenu()" class="lg:hidden bg-gray-100 p-2 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-blue-600 focus:outline-none transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
                 </div>
-                <button onclick="toggleMobileMenu()" class="lg:hidden bg-gray-100 p-2 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-blue-600 focus:outline-none transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
+            </div>
+            <!-- Tab bar bawah untuk desktop -->
+            <div class="hidden lg:block border-t border-gray-100 bg-gray-50/50">
+                <div class="max-w-7xl mx-auto px-4 flex gap-1 text-sm font-medium" id="navbar-tabs-bottom"></div>
             </div>
         </nav>
 
+        <!-- Mobile overlay & menu -->
         <div id="mobile-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity opacity-0 duration-300"></div>
-        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 ease-out flex flex-col">
+        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 ease-out flex flex-col">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <span class="font-extrabold text-blue-700 tracking-wider">NAVIGASI</span>
-                <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-red-500 bg-gray-200 hover:bg-red-100 rounded-full p-1 transition-colors">
+                <span class="font-extrabold text-blue-700 tracking-wider">Navigasi</span>
+                <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-red-500 bg-gray-200 hover:bg-red-100 rounded-full p-1.5 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <div class="flex flex-col p-4 gap-2 flex-grow overflow-y-auto" id="mobile-menu-list">
-                <!-- Dinamis oleh JavaScript -->
-            </div>
+            <div class="flex flex-col p-4 gap-1 flex-grow overflow-y-auto" id="mobile-menu-list"></div>
+            <div class="p-4 border-t border-gray-100 bg-gray-50/50" id="mobile-user-info"></div>
         </div>
 
         <div class="max-w-7xl mx-auto mt-4 p-4">
@@ -89,7 +89,7 @@
                 <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-row flex-wrap items-center gap-2 mb-6">
                     <div class="relative flex-1 min-w-[180px]">
                         <span class="absolute left-3 top-2 text-gray-400">🔍</span>
-                        <input type="text" id="search-resep" name="q_menu_search" autocomplete="off" placeholder="Cari menu..." class="pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm w-full focus:ring-2 focus:ring-blue-400 outline-none transition-all" oninput="loadDirektori()" />
+                        <input type="text" id="search-resep" placeholder="Cari menu..." class="pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm w-full focus:ring-2 focus:ring-blue-400 outline-none transition-all" oninput="loadDirektori()" />
                     </div>
                     <select id="filter-kategori-direktori" class="py-2 px-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none cursor-pointer flex-shrink-0 min-w-[130px]" onchange="loadDirektori()">
                         <option value="all">Semua Kategori</option>
@@ -100,7 +100,7 @@
 
             <!-- ===================== TAB SUMMARY HPP ===================== -->
             <div id="tab-summary" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-amber-500 to-orange-600 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📊</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Summary HPP</h2>
@@ -121,8 +121,8 @@
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
                     <table class="w-full text-left text-sm whitespace-nowrap" id="summary-table">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 border-b border-gray-200">
+                        <thead class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
+                            <tr>
                                 <th class="p-4 w-8 role-senior hidden" id="th-checkbox-summary">
                                     <input type="checkbox" id="select-all-summary" class="rounded border-gray-300 text-blue-600 focus:ring-blue-400" onchange="toggleSelectAllSummary()" />
                                 </th>
@@ -143,7 +143,7 @@
 
             <!-- ===================== TAB DASHBOARD ===================== -->
             <div id="tab-dashboard" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-purple-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📈</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Dashboard Analitik Finansial</h2>
@@ -168,7 +168,7 @@
                         <div class="text-3xl bg-red-50 p-3 rounded-xl text-red-600">⚠️</div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="font-bold text-gray-700 text-lg mb-4 border-b pb-2 flex items-center gap-2"><span class="text-emerald-500">🔥</span> Top 5 Profit Margin Tertinggi</h3>
                         <div class="overflow-x-auto"><table class="w-full text-left text-sm"><tbody id="dash-top-margin" class="divide-y divide-gray-100"></tbody></table></div>
@@ -180,7 +180,7 @@
                 </div>
 
                 <!-- ===== SECTION ENGINEERING PER KATEGORI ===== -->
-                <div class="mt-10 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="mt-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b pb-4">
                         <h3 class="font-bold text-gray-800 text-lg flex items-center gap-2"><span class="text-orange-500">🔧</span> Engineering Menu per Kategori (Cabang)</h3>
                         <div class="flex gap-3 items-center flex-wrap">
@@ -188,15 +188,13 @@
                             <select id="dash-filter-tahun" class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none" onchange="updateDashboardEngineering()"></select>
                         </div>
                     </div>
-                    <div id="dash-engineering-container" class="space-y-6">
-                        <!-- Akan diisi oleh JavaScript -->
-                    </div>
+                    <div id="dash-engineering-container" class="space-y-6"></div>
                 </div>
             </div>
 
             <!-- ===================== TAB BAHAN BAKU ===================== -->
             <div id="tab-bahan-baku" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📦</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Database Bahan Baku Master</h2>
@@ -206,7 +204,7 @@
                 <div class="role-admin hidden bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-2xl shadow-sm mb-6 flex flex-wrap gap-4 items-center justify-between border border-green-100 relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📊</div>
                     <div class="relative z-10"><span class="font-bold block text-green-800 mb-1 text-lg">Sistem Import Cerdas</span><p class="text-sm text-green-700">Perbarui ratusan data sekaligus menggunakan template Excel.</p></div>
-                    <div class="flex gap-2 relative z-10">
+                    <div class="flex gap-2 relative z-10 flex-wrap">
                         <button onclick="downloadTemplateBahanBaku()" class="bg-white text-green-700 border border-green-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-100 shadow-sm transition-colors">1. Template</button>
                         <button onclick="document.getElementById('import-bb-file').click()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 shadow flex items-center gap-2 transition-transform hover:-translate-y-0.5"><span>📤</span> 2. Import Excel</button>
                         <button onclick="exportBahanBakuToExcel()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 shadow-sm transition-colors">Export</button>
@@ -232,15 +230,15 @@
                     <div class="overflow-x-auto min-h-[300px] border border-gray-200 rounded-xl">
                         <table class="w-full text-left text-sm whitespace-nowrap">
                             <thead>
-                                <tr class="bg-gray-100 text-gray-700">
-                                    <th class="p-4 border-b border-r align-middle" rowspan="2"><div class="flex items-center justify-between gap-2"><span class="font-bold">Nama Bahan Baku</span><button onclick="toggleKebabMenu(event, 'sort-nama')" class="bg-white hover:bg-gray-200 p-1 rounded shadow-sm focus:outline-none"><svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-nama" class="dropdown-menu hidden absolute mt-2 left-6 bg-white shadow-xl rounded-xl border border-gray-100 w-40 py-2 text-sm text-gray-700 z-30 font-normal"><button onclick="sortBahanBaku('nama', 'asc')" class="w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-600">A ke Z</button><button onclick="sortBahanBaku('nama', 'desc')" class="w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-600">Z ke A</button></div></th>
-                                    <th class="p-3 border-b border-r text-center font-bold text-xs tracking-wider text-gray-500 uppercase" colspan="2">Info Pembelian</th><th class="p-3 border-b text-center font-bold text-xs tracking-wider text-gray-500 uppercase" colspan="2">Info Resep (Yield)</th><th class="p-3 border-b border-l text-center role-admin hidden" rowspan="2">Aksi</th>
+                                <tr class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
+                                    <th class="p-4 border-r align-middle" rowspan="2"><div class="flex items-center justify-between gap-2"><span class="font-bold">Nama Bahan Baku</span><button onclick="toggleKebabMenu(event, 'sort-nama')" class="bg-white/20 hover:bg-white/30 p-1 rounded shadow-sm focus:outline-none"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-nama" class="dropdown-menu hidden absolute mt-2 left-6 bg-white shadow-xl rounded-xl border border-gray-100 w-40 py-2 text-sm text-gray-700 z-30 font-normal"><button onclick="sortBahanBaku('nama', 'asc')" class="w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-600">A ke Z</button><button onclick="sortBahanBaku('nama', 'desc')" class="w-full text-left px-4 py-2 hover:bg-blue-50 hover:text-blue-600">Z ke A</button></div></th>
+                                    <th class="p-3 border-r text-center font-bold text-xs tracking-wider text-gray-200 uppercase" colspan="2">Info Pembelian</th><th class="p-3 text-center font-bold text-xs tracking-wider text-gray-200 uppercase" colspan="2">Info Resep (Yield)</th><th class="p-3 border-l text-center role-admin hidden" rowspan="2">Aksi</th>
                                 </tr>
-                                <tr class="bg-gray-50 text-xs text-gray-600">
-                                    <th class="p-3 border-b border-r relative"><div class="flex items-center justify-between gap-1"><span>Satuan</span><button onclick="toggleKebabMenu(event, 'sort-satuan-beli')" class="bg-gray-200 hover:bg-gray-300 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-satuan-beli" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-32 py-1 z-30 font-normal"><button onclick="sortBahanBaku('satuan_beli', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">A - Z</button><button onclick="sortBahanBaku('satuan_beli', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Z - A</button></div></th>
-                                    <th class="p-3 border-b border-r relative"><div class="flex items-center justify-between gap-1"><span>Harga Total</span><button onclick="toggleKebabMenu(event, 'sort-harga-beli')" class="bg-gray-200 hover:bg-gray-300 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-harga-beli" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-40 py-1 z-30 font-normal"><button onclick="sortBahanBaku('harga_beli', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termurah</button><button onclick="sortBahanBaku('harga_beli', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termahal</button></div></th>
-                                    <th class="p-3 border-b relative"><div class="flex items-center justify-between gap-1"><span>Konversi</span><button onclick="toggleKebabMenu(event, 'sort-konversi')" class="bg-gray-200 hover:bg-gray-300 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-konversi" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-32 py-1 z-30 font-normal"><button onclick="sortBahanBaku('nilai_konversi', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Terkecil</button><button onclick="sortBahanBaku('nilai_konversi', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Terbesar</button></div></th>
-                                    <th class="p-3 border-b relative"><div class="flex items-center justify-between gap-1"><span>Harga/Satuan</span><button onclick="toggleKebabMenu(event, 'sort-harga-satuan')" class="bg-gray-200 hover:bg-gray-300 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-harga-satuan" class="dropdown-menu hidden absolute mt-1 right-2 bg-white shadow-xl rounded-lg border w-40 py-1 z-30 font-normal"><button onclick="sortBahanBaku('harga', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termurah</button><button onclick="sortBahanBaku('harga', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termahal</button></div></th>
+                                <tr class="bg-gradient-to-r from-blue-800 to-indigo-800 text-gray-200">
+                                    <th class="p-3 border-r relative"><div class="flex items-center justify-between gap-1"><span>Satuan</span><button onclick="toggleKebabMenu(event, 'sort-satuan-beli')" class="bg-white/20 hover:bg-white/30 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-satuan-beli" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-32 py-1 z-30 font-normal"><button onclick="sortBahanBaku('satuan_beli', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">A - Z</button><button onclick="sortBahanBaku('satuan_beli', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Z - A</button></div></th>
+                                    <th class="p-3 border-r relative"><div class="flex items-center justify-between gap-1"><span>Harga Total</span><button onclick="toggleKebabMenu(event, 'sort-harga-beli')" class="bg-white/20 hover:bg-white/30 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-harga-beli" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-40 py-1 z-30 font-normal"><button onclick="sortBahanBaku('harga_beli', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termurah</button><button onclick="sortBahanBaku('harga_beli', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termahal</button></div></th>
+                                    <th class="p-3 relative"><div class="flex items-center justify-between gap-1"><span>Konversi</span><button onclick="toggleKebabMenu(event, 'sort-konversi')" class="bg-white/20 hover:bg-white/30 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-konversi" class="dropdown-menu hidden absolute mt-1 left-2 bg-white shadow-xl rounded-lg border w-32 py-1 z-30 font-normal"><button onclick="sortBahanBaku('nilai_konversi', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Terkecil</button><button onclick="sortBahanBaku('nilai_konversi', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Terbesar</button></div></th>
+                                    <th class="p-3 relative"><div class="flex items-center justify-between gap-1"><span>Harga/Satuan</span><button onclick="toggleKebabMenu(event, 'sort-harga-satuan')" class="bg-white/20 hover:bg-white/30 p-0.5 rounded focus:outline-none"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg></button></div><div id="sort-harga-satuan" class="dropdown-menu hidden absolute mt-1 right-2 bg-white shadow-xl rounded-lg border w-40 py-1 z-30 font-normal"><button onclick="sortBahanBaku('harga', 'asc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termurah</button><button onclick="sortBahanBaku('harga', 'desc')" class="w-full text-left px-3 py-1.5 hover:bg-gray-100">Termahal</button></div></th>
                                 </tr>
                             </thead>
                             <tbody id="table-bahan-baku"></tbody>
@@ -252,7 +250,7 @@
 
             <!-- ===================== TAB INPUT DATA ===================== -->
             <div id="tab-input" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-cyan-600 to-blue-700 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">🧪</div>
                     <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
@@ -343,7 +341,7 @@
                                     <select id="jual-tahun" class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-400 outline-none"></select>
                                 </div>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 flex-wrap">
                                 <button onclick="downloadTemplatePenjualan()" class="bg-white text-blue-700 border border-blue-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-50 shadow-sm transition-colors">📄 Template</button>
                                 <button onclick="document.getElementById('import-penjualan-file').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 shadow flex items-center gap-2 transition-transform hover:-translate-y-0.5"><span>📤</span> Import Excel</button>
                                 <button onclick="exportPenjualanToExcel()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 shadow-sm transition-colors">📥 Export</button>
@@ -354,7 +352,7 @@
                         <div class="overflow-x-auto border border-gray-200 rounded-xl">
                             <table class="w-full text-left text-sm whitespace-nowrap" id="table-penjualan-input">
                                 <thead>
-                                    <tr class="bg-gray-100 text-gray-700 border-b">
+                                    <tr class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
                                         <th class="p-3 font-bold">Menu</th>
                                         <th class="p-3 font-bold">Kategori</th>
                                         <th class="p-3 font-bold">Sub Kategori</th>
@@ -377,7 +375,7 @@
 
             <!-- ===================== TAB KATEGORI ===================== -->
             <div id="tab-kategori" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-purple-600 to-indigo-700 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">🏷️</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Manajemen Kategori DB</h2>
@@ -387,7 +385,7 @@
                 <div class="role-senior hidden bg-gradient-to-r from-purple-50 to-indigo-50 p-5 rounded-2xl shadow-sm mb-6 flex flex-wrap gap-4 items-center justify-between border border-purple-100 relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📥</div>
                     <div class="relative z-10"><span class="font-bold block text-purple-800 mb-1 text-lg">Integrasi Kategori Master</span><p class="text-sm text-purple-700">Manajemen cepat master klasifikasi group menu via file excel.</p></div>
-                    <div class="flex gap-2 relative z-10">
+                    <div class="flex gap-2 relative z-10 flex-wrap">
                         <button onclick="downloadTemplateKategori()" class="bg-white text-purple-700 border border-purple-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-purple-100 shadow-sm transition-colors">Template</button>
                         <button onclick="document.getElementById('import-kat-file').click()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-purple-700 shadow flex items-center gap-2"><span>📤</span> Import Excel</button>
                         <button onclick="exportKategoriToExcel()" class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 shadow-sm transition-colors">Export</button>
@@ -418,7 +416,7 @@
 
             <!-- ===================== TAB DATA PENJUALAN ===================== -->
             <div id="tab-data-penjualan" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-indigo-600 to-blue-700 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">📋</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Data Penjualan</h2>
@@ -442,8 +440,8 @@
                 </div>
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
                     <table class="w-full text-left text-sm whitespace-nowrap" id="table-penjualan">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 border-b">
+                        <thead class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
+                            <tr>
                                 <th class="p-4 w-8 role-senior hidden"><input type="checkbox" id="select-all-penjualan" class="rounded border-gray-300 text-blue-600 focus:ring-blue-400" onchange="toggleSelectAllPenjualan()" /></th>
                                 <th class="p-4 font-bold">Menu</th>
                                 <th class="p-4 font-bold">Kategori</th>
@@ -462,7 +460,7 @@
 
             <!-- ===================== TAB SETTINGS ===================== -->
             <div id="tab-settings" class="tab-content hidden">
-                <div class="bg-gradient-to-r from-slate-700 via-slate-600 to-gray-700 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden max-w-2xl mx-auto">
+                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md mb-6 text-white relative overflow-hidden max-w-2xl mx-auto">
                     <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-4 -translate-y-4">⚙️</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-1">Pengaturan Konfigurasi Global</h2>
@@ -545,7 +543,7 @@
     </div>
 
     <div id="modal-summary" class="hidden fixed inset-0 bg-black/60 z-[70] flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative modal-enter text-center"><div id="summary-icon" class="text-6xl mb-4 transform scale-110">✅</div><h3 id="summary-title" class="text-2xl font-black mb-1 text-gray-800">Selesai!</h3><p id="summary-message" class="text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">Rekapitulasi proses data Anda:</p><div class="flex justify-between gap-4 mb-6"><div class="bg-green-50 px-4 py-4 rounded-xl border border-green-200 w-1/2 shadow-inner"><span class="block text-xs font-bold text-green-700 mb-1 uppercase tracking-wider">Berhasil</span><span id="summary-success" class="text-3xl font-black text-green-600">0</span></div><div class="bg-red-50 px-4 py-4 rounded-xl border border-red-200 w-1/2 shadow-inner"><span class="block text-xs font-bold text-red-700 mb-1 uppercase tracking-wider">Gagal</span><span id="summary-fail" class="text-3xl font-black text-red-600">0</span></div></div><button onclick="closeModal('modal-summary')" class="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-gray-900 shadow-md transition-colors">Tutup Jendela</button></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative modal-enter text-center"><div id="summary-icon" class="text-6xl mb-4 transform scale-110">✅</div><h3 id="summary-title" class="text-2xl font-black mb-1 text-gray-800">Selesai!</h3><p id="summary-message" class="text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">Rekapitulasi proses data Anda:</p><div class="flex justify-between gap-4 mb-6"><div class="bg-green-50 px-4 py-4 rounded-xl border border-green-200 w-1/2 shadow-inner"><span class="block text-xs font-bold text-green-700 mb-1 uppercase tracking-wider">Berhasil</span><span id="summary-success" class="text-3xl font-black text-green-600">0</span></div><div class="bg-red-50 px-4 py-4 rounded-xl border border-red-200 w-1/2 shadow-inner"><span class="block text-xs font-bold text-red-700 mb-1 uppercase tracking-wider">Gagal</span><span id="summary-fail" class="text-3xl font-black text-red-600">0</span></div></div><button onclick="closeModal('modal-summary')" class="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-gray-900 shadow-md transition-colors">Tutup Jendela</button></div>
     </div>
 
     <div id="modal-kelola-kategori" class="hidden fixed inset-0 bg-black/60 z-[75] flex items-center justify-center p-4 backdrop-blur-sm">
