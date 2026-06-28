@@ -163,22 +163,52 @@ input[type="number"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* ===== Style untuk dropdown kebab yang konsisten ===== */
+/* ===== Dropdown menu (Kebab) ===== */
 .dropdown-menu {
-    z-index: 9999;
-}
-
-.dropdown-menu.fixed-dropdown {
+    display: none;
     position: fixed;
+    z-index: 9999;
+    min-width: 140px;
+}
+.dropdown-menu.fixed-dropdown {
+    display: block;
+}
+.dropdown-menu > div {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: #374151;
+}
+.dropdown-menu button:hover {
+    background: #f3f4f6;
+}
+.dropdown-menu button.font-bold.text-blue-600:hover {
+    background: #eff6ff;
+}
+.dropdown-menu button.font-bold.text-red-600:hover {
+    background: #fef2f2;
 }
 
-/* ===== Perbaikan Kebab Menu di Directory Card ===== */
+/* ===== Recipe Card Kebab Wrapper ===== */
 .recipe-card .kebab-wrapper {
     position: relative;
     flex-shrink: 0;
     margin-left: 8px;
 }
-
 .recipe-card .kebab-btn {
     background: rgba(255,255,255,0.2);
     backdrop-filter: blur(4px);
@@ -193,23 +223,22 @@ input[type="number"]::-webkit-outer-spin-button {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.2rem;
+    line-height: 1;
 }
 .recipe-card .kebab-btn:hover {
     background: rgba(255,255,255,0.35);
 }
-
 .recipe-card .menu-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 8px;
 }
-
 .recipe-card .menu-name-wrap {
     flex: 1;
     min-width: 0;
 }
-
 .recipe-card .menu-name {
     font-size: 1.25rem;
     font-weight: 900;
@@ -217,7 +246,6 @@ input[type="number"]::-webkit-outer-spin-button {
     line-height: 1.3;
     word-break: break-word;
 }
-
 .recipe-card .menu-yield {
     display: inline-block;
     font-size: 0.7rem;
@@ -227,44 +255,4 @@ input[type="number"]::-webkit-outer-spin-button {
     border-radius: 999px;
     margin-top: 4px;
     backdrop-filter: blur(4px);
-}
-
-/* ===== Bahan Baku dropdown kebab ===== */
-.bb-kebab-dropdown {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    margin-top: 4px;
-    background: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    width: 140px;
-    padding: 6px 0;
-    z-index: 9999;
-    overflow: hidden;
-}
-.bb-kebab-dropdown button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background 0.15s;
-    color: #374151;
-}
-.bb-kebab-dropdown button:hover {
-    background: #f3f4f6;
-}
-.bb-kebab-dropdown button.edit-btn:hover {
-    background: #eff6ff;
-    color: #2563eb;
-}
-.bb-kebab-dropdown button.delete-btn:hover {
-    background: #fef2f2;
-    color: #dc2626;
 }
