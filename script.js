@@ -523,8 +523,6 @@ function renderTabelBahanBaku() {
     } else {
         pageData.forEach(item => {
             const canEdit = hasRole('admin');
-            // Dropdown ID unik
-            const dropId = `drop-bb-${item.id}`;
             tbody.innerHTML += `
             <tr class="border-b border-gray-100 hover:bg-blue-50/30 transition-colors relative">
                 <td class="p-4 font-bold text-gray-700 truncate max-w-xs border-r">${item.nama}</td>
@@ -534,10 +532,10 @@ function renderTabelBahanBaku() {
                 <td class="p-3 text-blue-700 font-black">${formatRp(item.harga)} <span class="text-xs text-gray-400 font-normal">/ ${item.satuan}</span></td>
                 <td class="p-3 text-center border-l ${canEdit ? '' : 'hidden'}">
                     <div class="relative inline-block">
-                        <button onclick="toggleKebabMenu(event, '${dropId}')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold transition-colors">⋮</button>
-                        <div id="${dropId}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-30">
-                            <button onclick="bukaModalEditBB(${JSON.stringify(item).replace(/"/g, '&quot;')})" class="w-full text-left px-4 py-2 hover:bg-blue-50 font-semibold text-blue-600">📝 Edit</button>
-                            <button onclick="aksiHapusBahanBaku(${item.id}, '${item.nama}')" class="w-full text-left px-4 py-2 hover:bg-red-50 font-semibold text-red-600 border-t border-gray-100 mt-1">🗑️ Hapus</button>
+                        <button onclick="toggleKebabMenu(event, 'drop-bb-${item.id}')" class="kebab-btn bg-white hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold shadow-sm border border-gray-200 transition-colors">⋮</button>
+                        <div id="drop-bb-${item.id}" class="dropdown-menu hidden absolute right-10 top-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-32 py-2 text-sm text-gray-700 z-[70] overflow-hidden">
+                            <button onclick="bukaModalEditBB(${JSON.stringify(item).replace(/"/g, '&quot;')})" class="w-full block text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">📝 Edit</button>
+                            <button onclick="aksiHapusBahanBaku(${item.id}, '${item.nama}')" class="w-full block text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 border-t border-gray-100 mt-1">🗑️ Hapus</button>
                         </div>
                     </div>
                 </td>
@@ -673,11 +671,11 @@ function renderTabelManajemenKategori() {
         return list.map(k => `
             <li class="flex justify-between items-center bg-gray-50 border border-gray-100 p-3 rounded-lg relative hover:bg-white transition-colors">
                 <span class="font-semibold text-gray-700 truncate pr-4">${k.nama}</span>
-                ${canEdit ? `<div class="relative"><button onclick="toggleKebabMenu(event, 'drop-kat-${k.id}')" class="bg-white hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold shadow-sm border border-gray-200 transition-colors">⋮</button>
+                ${canEdit ? `<div class="relative"><button onclick="toggleKebabMenu(event, 'drop-kat-${k.id}')" class="bg-white hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold shadow-sm border border-gray-200 transition-colors kebab-btn">⋮</button>
                 <div id="drop-kat-${k.id}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-44 py-2 text-sm text-gray-700 z-50 overflow-hidden">
-                    <button onclick="bukaModalFormKategori('${jenis}', 'edit', ${k.id}, '${k.nama.replace(/'/g, "\\'")}')" class="w-full text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">📝 Edit Nama</button>
-                    <button onclick="bukaModalAssignMenu('${jenis}', '${k.nama.replace(/'/g, "\\'")}')" class="w-full text-left px-4 py-2 hover:bg-green-50 font-bold text-green-600 border-b border-gray-100">➕ Tambahkan Menu</button>
-                    <button onclick="hapusKategoriManajemen(${k.id}, '${jenis}', '${k.nama.replace(/'/g, "\\'")}')" class="w-full text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 mt-1">🗑️ Hapus Master</button>
+                    <button onclick="bukaModalFormKategori('${jenis}', 'edit', ${k.id}, '${k.nama.replace(/'/g, "\\'")}')" class="w-full block text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">📝 Edit Nama</button>
+                    <button onclick="bukaModalAssignMenu('${jenis}', '${k.nama.replace(/'/g, "\\'")}')" class="w-full block text-left px-4 py-2 hover:bg-green-50 font-bold text-green-600 border-b border-gray-100">➕ Tambahkan Menu</button>
+                    <button onclick="hapusKategoriManajemen(${k.id}, '${jenis}', '${k.nama.replace(/'/g, "\\'")}')" class="w-full block text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 mt-1">🗑️ Hapus Master</button>
                 </div></div>` : ''}
             </li>
         `).join('');
@@ -1218,7 +1216,7 @@ function renderTableSummary() {
         if (canEditResep) {
             html += `
                 <button onclick="toggleKebabMenu(event, 'drop-summary-${m.id}')" class="kebab-btn bg-white hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold shadow-sm border border-gray-200 transition-colors">⋮</button>
-                <div id="drop-summary-${m.id}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-[70] overflow-hidden">
+                <div id="drop-summary-${m.id}" class="dropdown-menu hidden absolute right-10 top-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-[70] overflow-hidden">
                     <button onclick="infoResepCard(${m.id})" class="w-full block text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">ℹ️ Info</button>
                     <button onclick="bukaModalEditResep(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-full block text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600 border-t border-gray-100">📝 Edit</button>
                     <button onclick="aksiHapusResep(${m.id}, '${m.nama}')" class="w-full block text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 border-t border-gray-100 mt-1">🗑️ Hapus</button>
@@ -1227,7 +1225,7 @@ function renderTableSummary() {
         } else {
             html += `
                 <button onclick="toggleKebabMenu(event, 'drop-summary-${m.id}')" class="kebab-btn bg-white hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold shadow-sm border border-gray-200 transition-colors">⋮</button>
-                <div id="drop-summary-${m.id}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-[70] overflow-hidden">
+                <div id="drop-summary-${m.id}" class="dropdown-menu hidden absolute right-10 top-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-[70] overflow-hidden">
                     <button onclick="infoResepCard(${m.id})" class="w-full block text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">ℹ️ Info</button>
                 </div>
             `;
