@@ -11,7 +11,7 @@ let bbSortKey = 'nama', bbSortOrder = 'asc';
 let summarySortKey = 'nama';
 let summarySortAsc = true;
 let cachedResepSummaryData = [];
-let penjualanInputData = {}; // { id: { qty, harga_jual } }
+let penjualanInputData = {};
 
 let currentUser = null;
 let appSettings = {
@@ -20,6 +20,20 @@ let appSettings = {
   overhead_value: 0
 };
 
+// ===== SESSION TAB STATE =====
+const STORAGE_KEY_TAB = 'fbpro_active_tab';
+
+function saveActiveTab(tabId) {
+    try {
+        sessionStorage.setItem(STORAGE_KEY_TAB, tabId);
+    } catch (_) {}
+}
+
+function getSavedTab() {
+    try {
+        return sessionStorage.getItem(STORAGE_KEY_TAB);
+    } catch (_) { return null; }
+}
 
 // ---------- DEBOUNCE UTILITIES ----------
 function debounce(func, wait) {
@@ -167,25 +181,21 @@ function toggleKebabMenu(event, menuId) {
     const targetMenu = document.getElementById(menuId);
     const isHidden = targetMenu.classList.contains('hidden');
     
-    // Hide all first
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.classList.add('hidden');
         menu.classList.remove('fixed-dropdown');
         menu.style.top = '';
         menu.style.left = '';
+        menu.style.right = '';
     });
     
     if (isHidden) {
         targetMenu.classList.remove('hidden');
-        
-        // Calculate fixed position to escape overflow-x-auto
         targetMenu.classList.add('fixed-dropdown');
         const rect = event.currentTarget.getBoundingClientRect();
-        
-        // Position it below the button and align right
         targetMenu.style.top = `${rect.bottom + window.scrollY + 4}px`;
         targetMenu.style.right = `${window.innerWidth - rect.right}px`;
-        targetMenu.style.left = 'auto'; // ensure left is auto since we use right
+        targetMenu.style.left = 'auto';
     }
 }
 
@@ -250,6 +260,12 @@ async function fetchUserRoleAndSettings(user) {
     updateUIByRole();
     hideLoginScreen();
     hideLoading();
+    
+    // Restore tab state after UI is ready
+    const savedTab = getSavedTab();
+    if (savedTab && document.getElementById(savedTab)) {
+        switchTab(savedTab);
+    }
 }
 
 // ---------- SETTINGS ----------
@@ -447,6 +463,12 @@ function updateUIByRole() {
         switchInputSubTab('hpp');
     }
     loadDirektori();
+    
+    // Restore saved tab if it exists and is allowed
+    const savedTab = getSavedTab();
+    if (savedTab && allowed.includes(savedTab)) {
+        switchTab(savedTab);
+    }
 }
 
 // ---------- SWITCH TAB ----------
@@ -466,6 +488,9 @@ function switchTab(tabId) {
         return onclickAttr && onclickAttr.includes(`'${tabId}'`);
     });
     if (activeNav) activeNav.classList.add('active');
+
+    // Save tab state
+    saveActiveTab(tabId);
 
     if (tabId === 'tab-settings') {
         document.getElementById('setting-hpp-limit').value = appSettings.hpp_limit;
@@ -487,7 +512,6 @@ function switchTab(tabId) {
         setTimeout(updateDashboardEngineering, 500);
     }
     if (tabId === 'tab-input') {
-        // Pastikan subtab penjualan merender tabel
         if (document.getElementById('subtab-penjualan') && !document.getElementById('subtab-penjualan').classList.contains('hidden')) {
             renderTablePenjualanInput();
         }
@@ -553,9 +577,27 @@ function renderTabelBahanBaku() {
     if (totalData === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center p-8 text-gray-400 italic">Bahan baku tidak ditemukan.</td></tr>`;
     } else {
+        const canEdit = hasRole('admin');
         pageData.forEach(item => {
-            const canEdit = hasRole('admin');
-            tbody.innerHTML += `<tr class="border-b border-gray-100 hover:bg-blue-50/30 transition-colors relative"><td class="p-4 font-bold text-gray-700 truncate max-w-xs border-r">${item.nama}</td><td class="p-3 border-l text-gray-500 bg-gray-50/50">${item.satuan_beli || '-'}</td><td class="p-3 border-r font-semibold text-gray-700 bg-gray-50/50">${item.harga_beli ? formatRp(item.harga_beli) : '-'}</td><td class="p-3 text-gray-500">${item.nilai_konversi || 1} ${item.satuan}</td><td class="p-3 text-blue-700 font-black">${formatRp(item.harga)} <span class="text-xs text-gray-400 font-normal">/ ${item.satuan}</span></td><td class="p-3 text-center border-l ${canEdit ? '' : 'hidden'}"><button onclick="toggleKebabMenu(event, 'drop-bb-${item.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold transition-colors">⋮</button><div id="drop-bb-${item.id}" class="dropdown-menu hidden absolute right-12 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-32 py-2 z-20"><button onclick="bukaModalEditBB(${JSON.stringify(item).replace(/"/g, '&quot;')})" class="w-full text-left px-4 py-2 hover:bg-blue-50 font-semibold text-blue-600">📝 Edit</button><button onclick="aksiHapusBahanBaku(${item.id}, '${item.nama}')" class="w-full text-left px-4 py-2 hover:bg-red-50 font-semibold text-red-600">🗑️ Hapus</button></div></td></tr>`;
+            const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
+            tbody.innerHTML += `
+                <tr class="border-b border-gray-100 hover:bg-blue-50/30 transition-colors relative">
+                    <td class="p-4 font-bold text-gray-700 truncate max-w-xs border-r">${item.nama}</td>
+                    <td class="p-3 border-l text-gray-500 bg-gray-50/50">${item.satuan_beli || '-'}</td>
+                    <td class="p-3 border-r font-semibold text-gray-700 bg-gray-50/50">${item.harga_beli ? formatRp(item.harga_beli) : '-'}</td>
+                    <td class="p-3 text-gray-500">${item.nilai_konversi || 1} ${item.satuan}</td>
+                    <td class="p-3 text-blue-700 font-black">${formatRp(item.harga)} <span class="text-xs text-gray-400 font-normal">/ ${item.satuan}</span></td>
+                    <td class="p-3 text-center border-l ${canEdit ? '' : 'hidden'}">
+                        <div class="relative inline-block">
+                            <button onclick="toggleKebabMenu(event, 'drop-bb-${item.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-lg font-bold transition-colors">⋮</button>
+                            <div id="drop-bb-${item.id}" class="bb-kebab-dropdown hidden">
+                                <button class="edit-btn" onclick="bukaModalEditBB(${itemJson})">📝 Edit</button>
+                                <button class="delete-btn" onclick="aksiHapusBahanBaku(${item.id}, '${item.nama}')">🗑️ Hapus</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
         });
     }
     document.getElementById('bb-info-halaman').innerText = `Menampilkan ${totalData > 0 ? startIndex + 1 : 0} - ${Math.min(endIndex, totalData)} dari ${totalData} data`;
@@ -1097,7 +1139,6 @@ async function loadDirektori() {
     if (document.getElementById('tab-dashboard').classList.contains('active')) {
         updateDashboardEngineering();
     }
-    // Update tabel penjualan input jika subtab penjualan aktif
     if (document.getElementById('subtab-penjualan') && !document.getElementById('subtab-penjualan').classList.contains('hidden')) {
         renderTablePenjualanInput();
     }
@@ -1138,19 +1179,26 @@ function renderCatalogDirektori() {
                         ovhText = `<div class="text-xs text-gray-400 mt-0.5">+ Overhead: ${formatRp(menu.overhead)}</div>`;
                     }
                 }
+                const menuJson = JSON.stringify(menu).replace(/"/g, '&quot;');
                 html += `
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible relative hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
-                        ${canEdit ? `<div class="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="toggleKebabMenu(event, 'drop-r-${menu.id}')" class="kebab-btn bg-white/90 backdrop-blur hover:bg-white text-gray-800 w-8 h-8 rounded-lg font-bold shadow-md border border-gray-200">⋮</button>
-                            <div id="drop-r-${menu.id}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-30">
-                                <button onclick="bukaModalEditResep(${JSON.stringify(menu).replace(/"/g, '&quot;')})" class="w-full text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">📝 Edit</button>
-                                <button onclick="duplikasiResepCard(${menu.id}, '${menu.nama.replace(/'/g, "\\'")}')" class="w-full text-left px-4 py-2 hover:bg-amber-50 font-bold text-amber-600">📋 Duplicate</button>
-                                <button onclick="aksiHapusResep(${menu.id}, '${menu.nama}')" class="w-full text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 border-t border-gray-100">🗑️ Hapus</button>
-                            </div>
-                        </div>` : ''}
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible relative hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col recipe-card">
                         <div class="bg-gradient-to-br ${cardBgColor} text-white p-5 rounded-t-2xl relative">
-                            <h3 class="text-xl font-black tracking-wide pr-8 leading-tight break-words">${menu.nama}</h3>
-                            <div class="absolute bottom-5 right-5 text-xs font-semibold bg-white/20 px-2 py-1 rounded backdrop-blur">YIELD: ${menu.yield}</div>
+                            <div class="menu-header">
+                                <div class="menu-name-wrap">
+                                    <div class="menu-name">${menu.nama}</div>
+                                    <div class="menu-yield">YIELD: ${menu.yield}</div>
+                                </div>
+                                ${canEdit ? `
+                                    <div class="kebab-wrapper">
+                                        <button onclick="toggleKebabMenu(event, 'drop-r-${menu.id}')" class="kebab-btn">⋮</button>
+                                        <div id="drop-r-${menu.id}" class="dropdown-menu hidden absolute right-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-100 w-36 py-2 text-sm text-gray-700 z-30 overflow-hidden">
+                                            <button onclick="bukaModalEditResep(${menuJson})" class="w-full text-left px-4 py-2 hover:bg-blue-50 font-bold text-blue-600">📝 Edit</button>
+                                            <button onclick="duplikasiResepCard(${menu.id}, '${menu.nama.replace(/'/g, "\\'")}')" class="w-full text-left px-4 py-2 hover:bg-amber-50 font-bold text-amber-600">📋 Duplicate</button>
+                                            <button onclick="aksiHapusResep(${menu.id}, '${menu.nama}')" class="w-full text-left px-4 py-2 hover:bg-red-50 font-bold text-red-600 border-t border-gray-100">🗑️ Hapus</button>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
                         </div>
                         <div class="p-5 md:p-6 flex-grow flex flex-col">
                             <ul class="mb-5 h-72 md:h-80 overflow-y-auto custom-scrollbar flex-grow pr-2">${menu.komposisiHTML || '<li class="text-sm text-gray-400 italic">Tanpa komposisi</li>'}</ul>
@@ -1678,14 +1726,12 @@ function renderTablePenjualanInput() {
     if (filterKat !== 'all') {
         menus = menus.filter(m => m.kategori === filterKat);
     }
-    // Kelompokkan per sub kategori
     const grouped = {};
     menus.forEach(menu => {
         const sub = menu.sub_kategori || 'Uncategorized';
         if (!grouped[sub]) grouped[sub] = [];
         grouped[sub].push(menu);
     });
-    // Inisialisasi penjualanInputData
     menus.forEach(menu => {
         if (!penjualanInputData[menu.id]) {
             penjualanInputData[menu.id] = { qty: '', harga_jual: menu.harga_jual || 0 };
@@ -1743,7 +1789,6 @@ async function simpanPenjualanMassal() {
     if (!bulan || !tahun) {
         return alert('Pilih bulan dan tahun terlebih dahulu!');
     }
-    // Kumpulkan data yang memiliki qty > 0
     const dataToInsert = [];
     for (const [id, data] of Object.entries(penjualanInputData)) {
         const qty = parseInt(data.qty) || 0;
@@ -1761,7 +1806,6 @@ async function simpanPenjualanMassal() {
     if (dataToInsert.length === 0) {
         return alert('Tidak ada data penjualan yang valid (Qty > 0 dan Harga > 0).');
     }
-    // Cek duplikasi: apakah sudah ada data untuk bulan/tahun yang sama?
     const { data: existing } = await supabaseClient
         .from('penjualan')
         .select('resep_id')
@@ -1770,7 +1814,6 @@ async function simpanPenjualanMassal() {
     const existingIds = new Set(existing ? existing.map(e => e.resep_id) : []);
     const conflictIds = dataToInsert.filter(d => existingIds.has(d.resep_id)).map(d => d.resep_id);
     if (conflictIds.length > 0) {
-        // Ambil nama menu yang conflict
         const conflictMenus = cachedResepSummaryData
             .filter(m => conflictIds.includes(m.id))
             .map(m => m.nama)
@@ -1778,7 +1821,6 @@ async function simpanPenjualanMassal() {
         if (!confirm(`Data penjualan untuk bulan ${bulan}/${tahun} sudah ada untuk menu: ${conflictMenus}.\n\nSimpan akan menimpa data yang sudah ada. Lanjutkan?`)) {
             return;
         }
-        // Hapus data yang sudah ada untuk menu-menu tersebut
         await supabaseClient
             .from('penjualan')
             .delete()
@@ -1793,7 +1835,6 @@ async function simpanPenjualanMassal() {
         alert('Gagal menyimpan penjualan: ' + error.message);
     } else {
         alert(`Berhasil menyimpan ${dataToInsert.length} data penjualan!`);
-        // Reset qty setelah simpan
         for (const id of Object.keys(penjualanInputData)) {
             penjualanInputData[id].qty = '';
         }
@@ -1828,14 +1869,11 @@ function eksekusiImportPenjualan(mode) {
             const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
             const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
             if (rows.length === 0) { hideLoading(); alert("Data Excel kosong!"); batalImport(); return; }
-            // Ambil daftar menu dari database untuk mapping
             const { data: menus } = await supabaseClient.from('resep').select('id, nama, kategori, sub_kategori');
             const menuMap = {};
             menus.forEach(m => {
-                // Key: nama.toLowerCase() -> id
                 menuMap[m.nama.toLowerCase().trim()] = m.id;
             });
-            // Kumpulkan data penjualan per baris
             const dataToInsert = [];
             let skipped = 0;
             rows.forEach(r => {
@@ -1845,7 +1883,6 @@ function eksekusiImportPenjualan(mode) {
                 if (!namaMenu || qty <= 0 || harga <= 0) { skipped++; return; }
                 const menuId = menuMap[namaMenu.toLowerCase()];
                 if (!menuId) { skipped++; return; }
-                // Ambil bulan dan tahun dari filter
                 const bulan = parseInt(document.getElementById('jual-bulan').value);
                 const tahun = parseInt(document.getElementById('jual-tahun').value);
                 if (!bulan || !tahun) {
@@ -1866,7 +1903,6 @@ function eksekusiImportPenjualan(mode) {
                 batalImport();
                 return;
             }
-            // Cek duplikasi
             const bulan = parseInt(document.getElementById('jual-bulan').value);
             const tahun = parseInt(document.getElementById('jual-tahun').value);
             const { data: existing } = await supabaseClient
@@ -1909,7 +1945,6 @@ function eksekusiImportPenjualan(mode) {
 }
 
 function exportPenjualanToExcel() {
-    // Ekspor data berdasarkan filter yang sedang aktif
     const bulan = document.getElementById('filter-data-bulan').value;
     const tahun = document.getElementById('filter-data-tahun').value;
     const menuId = document.getElementById('filter-data-menu').value;
@@ -2160,13 +2195,28 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// ===== RESTORE TAB ON PAGESHOW (bfcache) =====
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        const savedTab = getSavedTab();
+        if (savedTab && document.getElementById(savedTab)) {
+            switchTab(savedTab);
+        }
+    }
+});
+
 // ---------- ON LOAD ----------
 window.onload = async () => {
     await inisialisasiAuth();
     await loadKategoriDB();
-    // Set default filter data penjualan
     const bulanNow = new Date().getMonth() + 1;
     const tahunNow = new Date().getFullYear();
     document.getElementById('filter-data-bulan').value = bulanNow;
     document.getElementById('filter-data-tahun').value = tahunNow;
+    
+    // Restore tab if already logged in
+    const savedTab = getSavedTab();
+    if (savedTab && document.getElementById(savedTab) && currentUser) {
+        switchTab(savedTab);
+    }
 };
