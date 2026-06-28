@@ -11,8 +11,6 @@
     position: relative;
     padding-bottom: 0.5rem;
     cursor: pointer;
-    color: #64748b;
-    transition: color 0.2s;
 }
 .btn-tab::after {
     content: '';
@@ -21,20 +19,25 @@
     height: 3px;
     bottom: 0;
     left: 50%;
-    background-color: #2563eb; 
+    background-color: #FF3B30; 
     transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 3px 3px 0 0;
 }
 .btn-tab.active { 
-    color: #2563eb; 
-    font-weight: 700;
+    color: #FF3B30; 
 }
 .btn-tab.active::after {
     width: 100%;
 }
-.btn-tab:hover {
-    color: #2563eb;
+.dark .btn-tab.active {
+    color: #FF3B30;
+}
+.dark .btn-tab.active::after {
+    background-color: #FF3B30;
+}
+.dark .btn-tab::after {
+    background-color: #FF3B30;
 }
 
 @keyframes fadeIn {
@@ -60,6 +63,12 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
     background: #94a3b8; 
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
 }
 
 .loader {
@@ -98,7 +107,13 @@ input[type="number"]::-webkit-outer-spin-button {
     transition: color 0.2s;
 }
 .sortable:hover .sort-icon {
-    color: #2563eb;
+    color: #FF3B30;
+}
+.dark .sortable .sort-icon {
+    color: #64748b;
+}
+.dark .sortable:hover .sort-icon {
+    color: #FF3B30;
 }
 
 .summary-checkbox, #select-all-summary {
@@ -114,19 +129,292 @@ input[type="number"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* ===== TEMA TERANG ===== */
+/* Toast */
+#toast-container {
+    pointer-events: none;
+}
+.toast-item {
+    pointer-events: auto;
+    animation: toastIn 0.35s ease-out forwards;
+    backdrop-filter: blur(4px);
+}
+.toast-item.toast-out {
+    animation: toastOut 0.3s ease-in forwards;
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(50px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to { opacity: 0; transform: translateX(50px) scale(0.9); }
+}
+
+/* Overhead Toggle */
+.overhead-type-btn {
+    color: #64748b;
+    background: transparent;
+}
+.overhead-type-btn.active {
+    background: #ffffff;
+    color: #1d4ed8;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.overhead-type-btn:hover:not(.active) {
+    color: #334155;
+}
+.dark .overhead-type-btn {
+    color: #94a3b8;
+}
+.dark .overhead-type-btn.active {
+    background: #1e293b;
+    color: #FF3B30;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.dark .overhead-type-btn:hover:not(.active) {
+    color: #e2e8f0;
+}
+
+.btn-mini-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.input-subtab {
+    transition: opacity 0.25s ease;
+}
+.input-subtab.hidden {
+    display: none;
+}
+
+/* Tabel penjualan */
+#table-penjualan-input tbody tr:hover {
+    background-color: #f8fafc;
+}
+.dark #table-penjualan-input tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+#table-penjualan-input input[type="number"]::-webkit-inner-spin-button,
+#table-penjualan-input input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+/* ===== PERBAIKAN KEBBAB MENU DI BAHAN BAKU ===== */
+#table-bahan-baku .dropdown-menu {
+    min-width: 140px;
+    width: auto;
+    right: 0;
+    left: auto;
+    z-index: 30;
+}
+#table-bahan-baku .dropdown-menu button {
+    padding: 8px 16px;
+    font-weight: 600;
+}
+#table-bahan-baku .dropdown-menu button:hover {
+    background-color: #f1f5f9;
+}
+.dark #table-bahan-baku .dropdown-menu button:hover {
+    background-color: #1e293b;
+}
+#table-bahan-baku .dropdown-menu button.border-t {
+    border-top: 1px solid #e5e7eb;
+}
+.dark #table-bahan-baku .dropdown-menu button.border-t {
+    border-top-color: #374151;
+}
+
+/* ===== PERBAIKAN KEBBAB MENU DI KATEGORI ===== */
+#list-manajemen-kategori .dropdown-menu,
+#list-manajemen-sub-kategori .dropdown-menu {
+    min-width: 160px;
+    width: auto;
+    right: 0;
+    left: auto;
+    z-index: 50;
+}
+#list-manajemen-kategori .dropdown-menu button,
+#list-manajemen-sub-kategori .dropdown-menu button {
+    padding: 8px 16px;
+    font-weight: 600;
+}
+#list-manajemen-kategori .dropdown-menu button:hover,
+#list-manajemen-sub-kategori .dropdown-menu button:hover {
+    background-color: #f1f5f9;
+}
+.dark #list-manajemen-kategori .dropdown-menu button:hover,
+.dark #list-manajemen-sub-kategori .dropdown-menu button:hover {
+    background-color: #1e293b;
+}
+#list-manajemen-kategori .dropdown-menu button.border-t,
+#list-manajemen-sub-kategori .dropdown-menu button.border-t {
+    border-top: 1px solid #e5e7eb;
+}
+.dark #list-manajemen-kategori .dropdown-menu button.border-t,
+.dark #list-manajemen-sub-kategori .dropdown-menu button.border-t {
+    border-top-color: #374151;
+}
+
+/* ===== TEMA TERANG - PERBAIKAN KONTRAST ===== */
 body {
     background-color: #f1f5f9;
     color: #0f172a;
 }
-.bg-white {
-    background-color: #ffffff;
+.dark body {
+    background-color: #0f172a;
+    color: #e2e8f0;
 }
+
+/* Dark mode overrides */
+.dark {
+    background-color: #0f172a;
+}
+.dark body {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+.dark .bg-white {
+    background-color: #1e293b;
+}
+.dark .text-gray-800 {
+    color: #e2e8f0;
+}
+.dark .text-gray-700 {
+    color: #cbd5e1;
+}
+.dark .text-gray-600 {
+    color: #94a3b8;
+}
+.dark .text-gray-500 {
+    color: #64748b;
+}
+.dark .border-gray-100 {
+    border-color: #334155;
+}
+.dark .border-gray-200 {
+    border-color: #475569;
+}
+.dark .border-gray-300 {
+    border-color: #475569;
+}
+.dark .bg-gray-50 {
+    background-color: #1e293b;
+}
+.dark .bg-gray-100 {
+    background-color: #2d3748;
+}
+.dark .hover\:bg-gray-50:hover {
+    background-color: #2d3748;
+}
+.dark .hover\:bg-gray-100:hover {
+    background-color: #334155;
+}
+.dark .bg-blue-50 {
+    background-color: #1e293b;
+}
+.dark .bg-green-50 {
+    background-color: #1e293b;
+}
+.dark .bg-red-50 {
+    background-color: #1e293b;
+}
+.dark .bg-amber-50 {
+    background-color: #1e293b;
+}
+.dark .bg-indigo-50 {
+    background-color: #1e293b;
+}
+.dark .bg-purple-50 {
+    background-color: #1e293b;
+}
+.dark .bg-emerald-50 {
+    background-color: #1e293b;
+}
+.dark .bg-gray-800 {
+    background-color: #0f172a;
+}
+.dark .bg-gray-900 {
+    background-color: #0f172a;
+}
+.dark .shadow-sm {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.dark .shadow {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.dark .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+}
+.dark .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.6);
+}
+.dark .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.7);
+}
+.dark input,
+.dark select,
+.dark textarea {
+    background-color: #1e293b;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+    background-color: #1e293b;
+    border-color: #FF3B30;
+    outline: none;
+}
+.dark .bg-white\/10 {
+    background-color: rgba(255,255,255,0.05);
+}
+.dark .bg-white\/20 {
+    background-color: rgba(255,255,255,0.08);
+}
+.dark .bg-white\/30 {
+    background-color: rgba(255,255,255,0.12);
+}
+.dark .bg-white\/90 {
+    background-color: rgba(30, 41, 59, 0.9);
+}
+.dark .bg-gray-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-blue-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-green-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-red-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-amber-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-indigo-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+.dark .bg-purple-50\/50 {
+    background-color: rgba(30, 41, 59, 0.5);
+}
+
+/* Tema terang - perbaikan kontras */
 .bg-gray-50 {
     background-color: #f8fafc;
 }
 .bg-gray-100 {
     background-color: #f1f5f9;
+}
+.bg-gray-200 {
+    background-color: #e2e8f0;
 }
 .border-gray-100 {
     border-color: #e2e8f0;
@@ -152,121 +440,6 @@ body {
 .text-gray-800 {
     color: #0f172a;
 }
-
-/* Input di tema terang */
-input, select, textarea {
-    background-color: #ffffff;
-    border-color: #d1d5db;
-    color: #0f172a;
-}
-input:focus, select:focus, textarea:focus {
-    background-color: #ffffff;
-    border-color: #3b82f6;
-    outline: none;
-}
-
-/* Kebab menu dropdown - posisikan di bawah tombol */
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 4px;
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-    min-width: 140px;
-    padding: 6px 0;
-    z-index: 9999;
-    overflow: hidden;
-}
-.dropdown-menu button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #1e293b;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-.dropdown-menu button:hover {
-    background-color: #f1f5f9;
-}
-.dropdown-menu button.border-t {
-    border-top: 1px solid #e2e8f0;
-    margin-top: 4px;
-    padding-top: 8px;
-}
-
-/* Kategori list kebab button */
-#list-manajemen-kategori .relative,
-#list-manajemen-sub-kategori .relative {
-    position: relative;
-}
-#list-manajemen-kategori .dropdown-menu,
-#list-manajemen-sub-kategori .dropdown-menu {
-    right: 0;
-    left: auto;
-}
-
-/* Bahan baku table - kebab menu di bawah */
-#table-bahan-baku .dropdown-menu {
-    right: 0;
-    left: auto;
-    top: 100%;
-    margin-top: 4px;
-}
-#table-bahan-baku td:last-child {
-    position: relative;
-}
-.kebab-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.kebab-btn:hover {
-    background: #e2e8f0;
-    color: #0f172a;
-}
-
-/* ===== TEMA GELAP ===== */
-.dark body {
-    background-color: #0f172a;
-    color: #e2e8f0;
-}
-.dark .bg-white {
-    background-color: #1e293b;
-}
-.dark .bg-gray-50 {
-    background-color: #1e293b;
-}
-.dark .bg-gray-100 {
-    background-color: #2d3748;
-}
-.dark .border-gray-100 {
-    border-color: #334155;
-}
-.dark .border-gray-200 {
-    border-color: #475569;
-}
-.dark .border-gray-300 {
-    border-color: #475569;
-}
 .dark .text-gray-400 {
     color: #94a3b8;
 }
@@ -282,34 +455,54 @@ input:focus, select:focus, textarea:focus {
 .dark .text-gray-800 {
     color: #e2e8f0;
 }
+
+/* Card di tema terang */
+.bg-white {
+    background-color: #ffffff;
+}
+.dark .bg-white {
+    background-color: #1e293b;
+}
+
+/* Input di tema terang */
+input, select, textarea {
+    background-color: #ffffff;
+    border-color: #d1d5db;
+    color: #0f172a;
+}
+input:focus, select:focus, textarea:focus {
+    background-color: #ffffff;
+    border-color: #FF3B30;
+    outline: none;
+}
 .dark input, .dark select, .dark textarea {
     background-color: #1e293b;
     border-color: #475569;
     color: #e2e8f0;
 }
-.dark input:focus, .dark select:focus, .dark textarea:focus {
-    background-color: #1e293b;
-    border-color: #3b82f6;
+
+/* Tombol di tema terang */
+.btn-tab {
+    color: #64748b;
 }
-.dark .dropdown-menu {
-    background: #1e293b;
-    border-color: #475569;
+.btn-tab.active {
+    color: #FF3B30;
 }
-.dark .dropdown-menu button {
-    color: #e2e8f0;
-}
-.dark .dropdown-menu button:hover {
-    background-color: #2d3748;
-}
-.dark .dropdown-menu button.border-t {
-    border-top-color: #475569;
-}
-.dark .kebab-btn {
-    background: #2d3748;
-    border-color: #475569;
+.dark .btn-tab {
     color: #94a3b8;
 }
-.dark .kebab-btn:hover {
-    background: #475569;
-    color: #e2e8f0;
+.dark .btn-tab.active {
+    color: #FF3B30;
+}
+
+/* Kebab menu di kategori - pastikan terlihat */
+#list-manajemen-kategori .kebab-btn,
+#list-manajemen-sub-kategori .kebab-btn {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+.dark #list-manajemen-kategori .kebab-btn,
+.dark #list-manajemen-sub-kategori .kebab-btn {
+    background-color: #1e293b;
+    border-color: #475569;
 }
