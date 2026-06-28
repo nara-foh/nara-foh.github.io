@@ -1,4 +1,4 @@
-/* style.css - FULLY REVISED with maximum contrast for both themes */
+/* style.css - FULL VERSION with white text for selected elements */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -991,4 +991,70 @@ body {
 }
 .dark .bg-gray-800 .border-gray-600 {
     border-color: #475569 !important;
+}
+
+/* ================================================================
+   WHITE TEXT FOR SPECIFIED ELEMENTS (both themes)
+   ================================================================ */
+
+/* 1. Navbar brand "F&B PRO" - make it white with dark background in light theme */
+.light #brand-link {
+    background-color: #1e3a5f;
+    padding: 6px 14px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.light #brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-clip: unset !important;
+}
+/* In dark theme, keep as is (already white-ish) */
+.dark #brand-link h1 {
+    color: #f8fafc !important;
+}
+
+/* 2. Header tab titles (Directory Menu Card, Dashboard, etc.) - already white via bg-gradient, but ensure */
+.light .bg-gradient-to-r h2,
+.light .bg-gradient-to-r p,
+.light .bg-gradient-to-r .text-white {
+    color: #ffffff !important;
+}
+.dark .bg-gradient-to-r h2,
+.dark .bg-gradient-to-r p,
+.dark .bg-gradient-to-r .text-white {
+    color: #ffffff !important;
+}
+
+/* 3. Recipe card - menu name (e.g. "Americano O.G") - already white in gradient, but ensure */
+#recipe-wrapper .bg-gradient-to-br h3 {
+    color: #ffffff !important;
+}
+/* Also the yield badge */
+#recipe-wrapper .bg-white\/20 {
+    color: #ffffff !important;
+}
+
+/* 4. Category and sub-category labels - keep original colors (do not change) */
+/* Already handled by existing rules, no override needed */
+
+/* ================================================================
+   FIX FOR LIGHT THEME NAVBAR OTHER ELEMENTS (so they remain readable)
+   ================================================================ */
+.light #brand-link + div {
+    /* the right side of navbar (tabs, user status, logout) */
+    color: #0f172a !important;
+}
+.light .btn-tab {
+    color: #334155 !important;
+}
+.light .btn-tab.active {
+    color: #FF3B30 !important;
+}
+.light #user-status {
+    color: #FF3B30 !important;
+    background-color: rgba(255, 59, 48, 0.1) !important;
 }
