@@ -1,4 +1,4 @@
-/* style.css - FULL VERSION with complete contrast fixes for BOTH themes */
+/* style.css - FULLY REVISED with maximum contrast for both themes */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -206,79 +206,91 @@ input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
 }
 
-/* ===== PERBAIKAN KEBBAB MENU DI BAHAN BAKU ===== */
-#table-bahan-baku .dropdown-menu {
+/* ===== PERBAIKAN KEBBAB MENU ===== */
+#table-bahan-baku .dropdown-menu,
+#list-manajemen-kategori .dropdown-menu,
+#list-manajemen-sub-kategori .dropdown-menu,
+#summary-table .dropdown-menu,
+#recipe-wrapper .dropdown-menu {
     min-width: 140px;
     width: auto;
     right: 0;
     left: auto;
-    z-index: 30;
+    top: 100% !important;
+    margin-top: 4px !important;
+    z-index: 999 !important;
 }
-#table-bahan-baku .dropdown-menu button {
+#table-bahan-baku .dropdown-menu button,
+#list-manajemen-kategori .dropdown-menu button,
+#list-manajemen-sub-kategori .dropdown-menu button,
+#summary-table .dropdown-menu button,
+#recipe-wrapper .dropdown-menu button {
     padding: 8px 16px;
     font-weight: 600;
+    display: block;
+    width: 100%;
+    text-align: left;
 }
-#table-bahan-baku .dropdown-menu button:hover {
+#table-bahan-baku .dropdown-menu button:hover,
+#list-manajemen-kategori .dropdown-menu button:hover,
+#list-manajemen-sub-kategori .dropdown-menu button:hover,
+#summary-table .dropdown-menu button:hover,
+#recipe-wrapper .dropdown-menu button:hover {
     background-color: #f1f5f9;
 }
-.dark #table-bahan-baku .dropdown-menu button:hover {
+.dark #table-bahan-baku .dropdown-menu button:hover,
+.dark #list-manajemen-kategori .dropdown-menu button:hover,
+.dark #list-manajemen-sub-kategori .dropdown-menu button:hover,
+.dark #summary-table .dropdown-menu button:hover,
+.dark #recipe-wrapper .dropdown-menu button:hover {
     background-color: #1e293b;
 }
-#table-bahan-baku .dropdown-menu button.border-t {
+#table-bahan-baku .dropdown-menu button.border-t,
+#list-manajemen-kategori .dropdown-menu button.border-t,
+#list-manajemen-sub-kategori .dropdown-menu button.border-t,
+#summary-table .dropdown-menu button.border-t,
+#recipe-wrapper .dropdown-menu button.border-t {
     border-top: 1px solid #e5e7eb;
 }
-.dark #table-bahan-baku .dropdown-menu button.border-t {
+.dark #table-bahan-baku .dropdown-menu button.border-t,
+.dark #list-manajemen-kategori .dropdown-menu button.border-t,
+.dark #list-manajemen-sub-kategori .dropdown-menu button.border-t,
+.dark #summary-table .dropdown-menu button.border-t,
+.dark #recipe-wrapper .dropdown-menu button.border-t {
     border-top-color: #374151;
 }
 
-/* ===== PERBAIKAN KEBBAB MENU DI KATEGORI ===== */
-#list-manajemen-kategori .dropdown-menu,
-#list-manajemen-sub-kategori .dropdown-menu {
-    min-width: 160px;
-    width: auto;
-    right: 0;
-    left: auto;
-    z-index: 50;
+/* Kebab buttons - both themes */
+.kebab-btn {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #334155;
 }
-#list-manajemen-kategori .dropdown-menu button,
-#list-manajemen-sub-kategori .dropdown-menu button {
-    padding: 8px 16px;
-    font-weight: 600;
-}
-#list-manajemen-kategori .dropdown-menu button:hover,
-#list-manajemen-sub-kategori .dropdown-menu button:hover {
+.kebab-btn:hover {
     background-color: #f1f5f9;
 }
-.dark #list-manajemen-kategori .dropdown-menu button:hover,
-.dark #list-manajemen-sub-kategori .dropdown-menu button:hover {
+.dark .kebab-btn {
     background-color: #1e293b;
+    border-color: #475569;
+    color: #e2e8f0;
 }
-#list-manajemen-kategori .dropdown-menu button.border-t,
-#list-manajemen-sub-kategori .dropdown-menu button.border-t {
-    border-top: 1px solid #e5e7eb;
-}
-.dark #list-manajemen-kategori .dropdown-menu button.border-t,
-.dark #list-manajemen-sub-kategori .dropdown-menu button.border-t {
-    border-top-color: #374151;
+.dark .kebab-btn:hover {
+    background-color: #2d3748;
 }
 
 /* ================================================================
-   BASE GLOBAL COLORS (LIGHT & DARK)
+   LIGHT THEME - MAXIMUM CONTRAST
    ================================================================ */
-
-/* --- LIGHT THEME (default) --- */
 body {
     background-color: #f1f5f9;
     color: #0f172a;
 }
-/* --- DARK THEME --- */
 .dark body {
     background-color: #0f172a;
     color: #e2e8f0;
 }
 
-/* ----- LIGHT THEME OVERRIDES ----- */
-/* Backgrounds */
+/* --- LIGHT THEME OVERRIDES --- */
 .light .bg-white {
     background-color: #ffffff !important;
 }
@@ -301,22 +313,40 @@ body {
     border-color: #94a3b8 !important;
 }
 
-/* All text colors - light theme */
+/* ALL TEXT - LIGHT THEME - DARK AND READABLE */
+.light,
+.light *,
 .light .text-gray-400,
 .light .text-gray-500,
 .light .text-gray-600,
 .light .text-gray-700,
-.light .text-gray-800 {
+.light .text-gray-800,
+.light p,
+.light span,
+.light div,
+.light label,
+.light h1, .light h2, .light h3, .light h4, .light h5, .light h6,
+.light .block,
+.light .font-bold,
+.light .font-semibold,
+.light .font-medium,
+.light .text-sm,
+.light .text-xs,
+.light .text-base,
+.light .text-lg,
+.light .text-xl {
     color: #0f172a !important;
 }
+
+/* But keep muted colors for specific elements */
 .light .text-gray-400 {
-    color: #334155 !important;
+    color: #475569 !important;
 }
 .light .text-gray-500 {
-    color: #1e293b !important;
+    color: #334155 !important;
 }
 .light .text-gray-600 {
-    color: #0f172a !important;
+    color: #1e293b !important;
 }
 .light .text-gray-700 {
     color: #0f172a !important;
@@ -325,13 +355,12 @@ body {
     color: #0f172a !important;
 }
 
-/* Force all text inside white cards to be dark */
+/* Override for elements inside white cards */
 .light .bg-white *,
 .light .bg-gray-50 *,
 .light .bg-gray-100 * {
     color: #0f172a !important;
 }
-/* But keep some muted colors for specific elements */
 .light .bg-white .text-gray-400,
 .light .bg-gray-50 .text-gray-400 {
     color: #475569 !important;
@@ -341,17 +370,17 @@ body {
     color: #334155 !important;
 }
 
-/* Inputs & selects - light */
+/* INPUTS - LIGHT */
 .light input,
 .light select,
 .light textarea {
     background-color: #ffffff !important;
-    border-color: #d1d5db !important;
+    border-color: #cbd5e1 !important;
     color: #0f172a !important;
 }
 .light input::placeholder,
 .light textarea::placeholder {
-    color: #94a3b8 !important;
+    color: #64748b !important;
 }
 .light input:focus,
 .light select:focus,
@@ -361,7 +390,7 @@ body {
     outline: none;
 }
 
-/* Labels and headings - light */
+/* LABELS - LIGHT */
 .light label,
 .light .block.text-sm,
 .light .text-xs.font-bold,
@@ -371,7 +400,7 @@ body {
     color: #0f172a !important;
 }
 
-/* Recipe cards - light */
+/* RECIPE CARDS - LIGHT */
 .light #recipe-wrapper .text-gray-400,
 .light #recipe-wrapper .text-gray-500,
 .light #recipe-wrapper .text-gray-600,
@@ -379,14 +408,8 @@ body {
 .light #recipe-wrapper .text-gray-800 {
     color: #0f172a !important;
 }
-.light #recipe-wrapper .font-medium.text-gray-500 {
-    color: #1e293b !important;
-}
-.light #recipe-wrapper .font-bold.text-gray-800 {
-    color: #0f172a !important;
-}
-.light #recipe-wrapper .bg-gray-50 .text-gray-500,
 .light #recipe-wrapper .bg-gray-50 .text-gray-400,
+.light #recipe-wrapper .bg-gray-50 .text-gray-500,
 .light #recipe-wrapper .bg-gray-50 .text-gray-600,
 .light #recipe-wrapper .bg-gray-50 .text-gray-700,
 .light #recipe-wrapper .bg-gray-50 .text-gray-800 {
@@ -396,7 +419,7 @@ body {
     color: #475569 !important;
 }
 
-/* Summary table - light */
+/* SUMMARY TABLE - LIGHT */
 .light #summary-table .text-gray-400,
 .light #summary-table .text-gray-500,
 .light #summary-table .text-gray-600,
@@ -408,7 +431,7 @@ body {
     color: #475569 !important;
 }
 
-/* Dashboard - light */
+/* DASHBOARD - LIGHT */
 .light .text-gray-400.uppercase {
     color: #475569 !important;
 }
@@ -419,7 +442,7 @@ body {
     color: #1e293b !important;
 }
 
-/* Modal - light */
+/* MODAL - LIGHT */
 .light .modal-enter .text-gray-400,
 .light .modal-enter .text-gray-500,
 .light .modal-enter .text-gray-600,
@@ -431,7 +454,7 @@ body {
     color: #475569 !important;
 }
 
-/* Category tags - light */
+/* CATEGORY TAGS - LIGHT */
 .light .bg-blue-50.text-blue-700 {
     color: #1e3a5f !important;
     background-color: #dbeafe !important;
@@ -440,17 +463,7 @@ body {
     border-color: #93c5fd !important;
 }
 
-/* Kebab buttons - light */
-.light .kebab-btn {
-    background-color: #ffffff !important;
-    border-color: #e2e8f0 !important;
-    color: #334155 !important;
-}
-.light .kebab-btn:hover {
-    background-color: #f1f5f9 !important;
-}
-
-/* Dropdown menus - light */
+/* DROPDOWN - LIGHT */
 .light .dropdown-menu {
     background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
@@ -462,7 +475,7 @@ body {
     background-color: #f1f5f9 !important;
 }
 
-/* Settings page - light */
+/* SETTINGS - LIGHT */
 .light #tab-settings .text-gray-400,
 .light #tab-settings .text-gray-500,
 .light #tab-settings .text-gray-600,
@@ -474,14 +487,12 @@ body {
     color: #475569 !important;
 }
 
-/* Penjualan tables - light */
+/* PENJUALAN TABLES - LIGHT */
 .light #table-penjualan .text-gray-400,
 .light #table-penjualan .text-gray-500,
 .light #table-penjualan .text-gray-600,
 .light #table-penjualan .text-gray-700,
-.light #table-penjualan .text-gray-800 {
-    color: #0f172a !important;
-}
+.light #table-penjualan .text-gray-800,
 .light #table-penjualan-input .text-gray-400,
 .light #table-penjualan-input .text-gray-500,
 .light #table-penjualan-input .text-gray-600,
@@ -490,10 +501,35 @@ body {
     color: #0f172a !important;
 }
 
-/* ================================================================
-   DARK THEME OVERRIDES (make text brighter and more visible)
-   ================================================================ */
+/* BAHAN BAKU TABLE - LIGHT */
+.light #table-bahan-baku .text-gray-400,
+.light #table-bahan-baku .text-gray-500,
+.light #table-bahan-baku .text-gray-600,
+.light #table-bahan-baku .text-gray-700,
+.light #table-bahan-baku .text-gray-800 {
+    color: #0f172a !important;
+}
+.light #table-bahan-baku .text-gray-400 {
+    color: #475569 !important;
+}
 
+/* KATEGORI LIST - LIGHT */
+.light #list-manajemen-kategori .text-gray-400,
+.light #list-manajemen-kategori .text-gray-500,
+.light #list-manajemen-kategori .text-gray-600,
+.light #list-manajemen-kategori .text-gray-700,
+.light #list-manajemen-kategori .text-gray-800,
+.light #list-manajemen-sub-kategori .text-gray-400,
+.light #list-manajemen-sub-kategori .text-gray-500,
+.light #list-manajemen-sub-kategori .text-gray-600,
+.light #list-manajemen-sub-kategori .text-gray-700,
+.light #list-manajemen-sub-kategori .text-gray-800 {
+    color: #0f172a !important;
+}
+
+/* ================================================================
+   DARK THEME - MAXIMUM BRIGHTNESS
+   ================================================================ */
 .dark .bg-white {
     background-color: #1e293b !important;
 }
@@ -516,7 +552,31 @@ body {
     border-color: #475569 !important;
 }
 
-/* All text colors - dark theme (brighter) */
+/* ALL TEXT - DARK THEME - BRIGHT AND READABLE */
+.dark,
+.dark *,
+.dark .text-gray-400,
+.dark .text-gray-500,
+.dark .text-gray-600,
+.dark .text-gray-700,
+.dark .text-gray-800,
+.dark p,
+.dark span,
+.dark div,
+.dark label,
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark .block,
+.dark .font-bold,
+.dark .font-semibold,
+.dark .font-medium,
+.dark .text-sm,
+.dark .text-xs,
+.dark .text-base,
+.dark .text-lg,
+.dark .text-xl {
+    color: #f1f5f9 !important;
+}
+
 .dark .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -533,7 +593,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Force text inside cards to be bright */
+/* Override for elements inside cards */
 .dark .bg-white *,
 .dark .bg-gray-50 *,
 .dark .bg-gray-100 * {
@@ -560,7 +620,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Inputs & selects - dark */
+/* INPUTS - DARK */
 .dark input,
 .dark select,
 .dark textarea {
@@ -580,7 +640,7 @@ body {
     outline: none;
 }
 
-/* Labels and headings - dark */
+/* LABELS - DARK */
 .dark label,
 .dark .block.text-sm,
 .dark .text-xs.font-bold,
@@ -590,27 +650,13 @@ body {
     color: #f1f5f9 !important;
 }
 
-/* Recipe cards - dark */
-.dark #recipe-wrapper .text-gray-400 {
-    color: #94a3b8 !important;
-}
-.dark #recipe-wrapper .text-gray-500 {
-    color: #cbd5e1 !important;
-}
-.dark #recipe-wrapper .text-gray-600 {
-    color: #e2e8f0 !important;
-}
-.dark #recipe-wrapper .text-gray-700 {
-    color: #f1f5f9 !important;
-}
+/* RECIPE CARDS - DARK */
+.dark #recipe-wrapper .text-gray-400,
+.dark #recipe-wrapper .text-gray-500,
+.dark #recipe-wrapper .text-gray-600,
+.dark #recipe-wrapper .text-gray-700,
 .dark #recipe-wrapper .text-gray-800 {
-    color: #ffffff !important;
-}
-.dark #recipe-wrapper .font-medium.text-gray-500 {
-    color: #cbd5e1 !important;
-}
-.dark #recipe-wrapper .font-bold.text-gray-800 {
-    color: #ffffff !important;
+    color: #e2e8f0 !important;
 }
 .dark #recipe-wrapper .bg-gray-50 .text-gray-400 {
     color: #94a3b8 !important;
@@ -628,7 +674,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Summary table - dark */
+/* SUMMARY TABLE - DARK */
 .dark #summary-table .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -645,7 +691,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Dashboard - dark */
+/* DASHBOARD - DARK */
 .dark .text-gray-400.uppercase {
     color: #94a3b8 !important;
 }
@@ -662,7 +708,7 @@ body {
     color: #cbd5e1 !important;
 }
 
-/* Modal - dark */
+/* MODAL - DARK */
 .dark .modal-enter .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -679,7 +725,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Category tags - dark */
+/* CATEGORY TAGS - DARK */
 .dark .bg-blue-50.text-blue-700 {
     color: #93c5fd !important;
     background-color: #1e3a5f !important;
@@ -688,17 +734,7 @@ body {
     border-color: #3b82f6 !important;
 }
 
-/* Kebab buttons - dark */
-.dark .kebab-btn {
-    background-color: #1e293b !important;
-    border-color: #475569 !important;
-    color: #e2e8f0 !important;
-}
-.dark .kebab-btn:hover {
-    background-color: #334155 !important;
-}
-
-/* Dropdown menus - dark */
+/* DROPDOWN - DARK */
 .dark .dropdown-menu {
     background-color: #1e293b !important;
     border-color: #475569 !important;
@@ -710,7 +746,7 @@ body {
     background-color: #2d3748 !important;
 }
 
-/* Settings page - dark */
+/* SETTINGS - DARK */
 .dark #tab-settings .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -727,7 +763,7 @@ body {
     color: #ffffff !important;
 }
 
-/* Penjualan tables - dark */
+/* PENJUALAN TABLES - DARK */
 .dark #table-penjualan .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -759,17 +795,38 @@ body {
     color: #ffffff !important;
 }
 
-/* Navbar text - both themes */
-.light #user-status {
-    color: #FF3B30 !important;
-    background-color: #FF3B30/10 !important;
+/* BAHAN BAKU TABLE - DARK */
+.dark #table-bahan-baku .text-gray-400 {
+    color: #94a3b8 !important;
 }
-.dark #user-status {
-    color: #FF3B30 !important;
-    background-color: #FF3B30/10 !important;
+.dark #table-bahan-baku .text-gray-500 {
+    color: #cbd5e1 !important;
+}
+.dark #table-bahan-baku .text-gray-600 {
+    color: #e2e8f0 !important;
+}
+.dark #table-bahan-baku .text-gray-700 {
+    color: #f1f5f9 !important;
+}
+.dark #table-bahan-baku .text-gray-800 {
+    color: #ffffff !important;
 }
 
-/* Theme toggle buttons - both themes */
+/* KATEGORI LIST - DARK */
+.dark #list-manajemen-kategori .text-gray-400,
+.dark #list-manajemen-kategori .text-gray-500,
+.dark #list-manajemen-kategori .text-gray-600,
+.dark #list-manajemen-kategori .text-gray-700,
+.dark #list-manajemen-kategori .text-gray-800,
+.dark #list-manajemen-sub-kategori .text-gray-400,
+.dark #list-manajemen-sub-kategori .text-gray-500,
+.dark #list-manajemen-sub-kategori .text-gray-600,
+.dark #list-manajemen-sub-kategori .text-gray-700,
+.dark #list-manajemen-sub-kategori .text-gray-800 {
+    color: #e2e8f0 !important;
+}
+
+/* THEME TOGGLE BUTTONS - BOTH */
 .theme-btn {
     transition: all 0.2s ease;
 }
@@ -781,7 +838,7 @@ body {
 .light .theme-btn:hover {
     background-color: #f1f5f9;
 }
-.light .theme-btn.bg-\\[\\#FF3B30\\] {
+.light .theme-btn.bg-\[\#FF3B30\] {
     background-color: #FF3B30 !important;
     color: #ffffff !important;
     border-color: #FF3B30 !important;
@@ -794,50 +851,41 @@ body {
 .dark .theme-btn:hover {
     background-color: #2d3748;
 }
-.dark .theme-btn.bg-\\[\\#FF3B30\\] {
+.dark .theme-btn.bg-\[\#FF3B30\] {
     background-color: #FF3B30 !important;
     color: #ffffff !important;
     border-color: #FF3B30 !important;
 }
 
-/* Ensure all dropdown menus have proper z-index and positioning */
-.dropdown-menu {
-    z-index: 999 !important;
+/* NAVBAR USER STATUS - BOTH */
+#user-status {
+    color: #FF3B30 !important;
+    background-color: rgba(255, 59, 48, 0.1) !important;
+    border-color: rgba(255, 59, 48, 0.2) !important;
+}
+.dark #user-status {
+    color: #FF3B30 !important;
+    background-color: rgba(255, 59, 48, 0.15) !important;
+    border-color: rgba(255, 59, 48, 0.3) !important;
 }
 
-/* Fix for category list items */
-#list-manajemen-kategori li,
-#list-manajemen-sub-kategori li {
-    position: relative;
+/* SCROLLBAR - BOTH */
+::-webkit-scrollbar {
+    width: 6px;
 }
-#list-manajemen-kategori .dropdown-menu,
-#list-manajemen-sub-kategori .dropdown-menu {
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    margin-top: 4px !important;
+::-webkit-scrollbar-track {
+    background: transparent;
 }
-
-/* Fix for summary table dropdown */
-#summary-table .dropdown-menu {
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    margin-top: 4px !important;
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
 }
-
-/* Fix for bahan baku dropdown */
-#table-bahan-baku .dropdown-menu {
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    margin-top: 4px !important;
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
-
-/* Fix for recipe card dropdown */
-#recipe-wrapper .dropdown-menu {
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    margin-top: 4px !important;
+.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
 }
