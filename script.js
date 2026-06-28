@@ -327,31 +327,42 @@ async function logoutAdmin() {
 function updateUIByRole() {
     const isLoggedIn = !!currentUser;
     const role = currentUser?.role || 'guest';
-    const allTabs = ['tab-direktori', 'tab-hpp', 'tab-dashboard', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'];
+    
+    // URUTAN TAB: Dashboard, Directory Menu, HPP, Bahan Baku, Kategori, Data Penjualan, Settings
+    const allTabs = ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'];
     const tabMap = {
-        staff: ['tab-direktori', 'tab-hpp'],
-        admin: ['tab-direktori', 'tab-hpp', 'tab-dashboard', 'tab-bahan-baku'],
-        senior_bar: ['tab-direktori', 'tab-hpp', 'tab-dashboard', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan'],
-        head_bar: ['tab-direktori', 'tab-hpp', 'tab-dashboard', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings']
+        staff: ['tab-dashboard', 'tab-direktori', 'tab-hpp'],
+        admin: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku'],
+        senior_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan'],
+        head_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings']
     };
     const allowed = tabMap[role] || tabMap.staff;
+    
+    // Sembunyikan semua tab
     allTabs.forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.classList.add('hidden'); el.classList.remove('active'); }
     });
+    // Tampilkan tab yang diizinkan
     allowed.forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.classList.remove('hidden'); }
     });
-    const firstTab = allowed[0] || 'tab-direktori';
-    const firstEl = document.getElementById(firstTab);
+    
+    // HOME = tab-direktori (Directory Menu)
+    const homeTab = 'tab-direktori';
+    // Tab pertama yang aktif adalah home
+    const firstTab = homeTab;
+    // Jika home tidak ada di allowed, ambil yang pertama
+    const activeTab = allowed.includes(homeTab) ? homeTab : allowed[0];
+    const firstEl = document.getElementById(activeTab);
     if (firstEl) firstEl.classList.add('active');
 
     const navbar = document.getElementById('navbar-tabs');
     const tabNames = {
+        'tab-dashboard': '📈 Dashboard',
         'tab-direktori': '📑 Directory Menu',
         'tab-hpp': '📊 HPP & Summary',
-        'tab-dashboard': '📈 Dashboard',
         'tab-bahan-baku': '📦 Bahan Baku',
         'tab-kategori': '🏷️ Kategori',
         'tab-data-penjualan': '📋 Data Penjualan',
@@ -360,7 +371,7 @@ function updateUIByRole() {
     navbar.innerHTML = '';
     allowed.forEach(id => {
         const btn = document.createElement('button');
-        btn.className = `btn-tab ${id === firstTab ? 'active' : ''}`;
+        btn.className = `btn-tab ${id === activeTab ? 'active' : ''}`;
         btn.innerText = tabNames[id] || id;
         btn.onclick = () => switchTab(id);
         navbar.appendChild(btn);
@@ -384,7 +395,7 @@ function updateUIByRole() {
     mobileMenuList.appendChild(statusDiv);
     allowed.forEach(id => {
         const btn = document.createElement('button');
-        btn.className = `btn-tab-mobile text-gray-600 dark:text-gray-300 font-semibold text-left py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${id === firstTab ? 'bg-blue-50 dark:bg-blue-900/20 text-[#FF3B30] font-bold' : ''}`;
+        btn.className = `btn-tab-mobile text-gray-600 dark:text-gray-300 font-semibold text-left py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${id === activeTab ? 'bg-blue-50 dark:bg-blue-900/20 text-[#FF3B30] font-bold' : ''}`;
         btn.innerText = tabNames[id] || id;
         btn.onclick = () => { switchTab(id); toggleMobileMenu(); };
         mobileMenuList.appendChild(btn);
@@ -420,6 +431,14 @@ function updateUIByRole() {
     loadMenuDropdownPenjualan();
     populateKategoriFilterPenjualan();
 
+    // Restore tab dari sessionStorage jika ada
+    const savedTab = sessionStorage.getItem('activeTab');
+    if (savedTab && allowed.includes(savedTab)) {
+        switchTab(savedTab);
+    } else {
+        switchTab(activeTab);
+    }
+
     if (document.getElementById('tab-bahan-baku').classList.contains('active')) {
         bbCurrentPage = 1;
         loadBahanBaku();
@@ -447,6 +466,9 @@ function switchTab(tabId) {
         return onclickAttr && onclickAttr.includes(`'${tabId}'`);
     });
     if (activeNav) activeNav.classList.add('active');
+    
+    // Simpan state tab di sessionStorage untuk mencegah refresh yang tidak diinginkan
+    try { sessionStorage.setItem('activeTab', tabId); } catch(e) {}
 
     if (tabId === 'tab-settings') {
         document.getElementById('setting-hpp-limit').value = appSettings.hpp_limit;
@@ -473,11 +495,32 @@ function switchTab(tabId) {
     }
 }
 
-// ==================== BAHAN BAKU ====================
-// (semua fungsi bahan baku tetap sama seperti sebelumnya, tidak saya tulis ulang agar tidak terlalu panjang)
-// Saya asumsikan Anda sudah memiliki kode lengkap dari versi sebelumnya.
-// Untuk menghemat, saya tulis ulang fungsi-fungsi penting yang digunakan.
+// ---------- LOGO SEBAGAI LINK KE HOME ----------
+document.addEventListener('DOMContentLoaded', function() {
+    const brandLink = document.getElementById('brand-link');
+    if (brandLink) {
+        brandLink.addEventListener('click', function(e) {
+            // Cegah jika sedang di-login overlay
+            if (document.getElementById('login-overlay').classList.contains('hidden') === false) return;
+            // Arahkan ke tab Directory Menu (home)
+            switchTab('tab-direktori');
+            // Update navbar active
+            document.querySelectorAll('.btn-tab').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes('Directory Menu')) {
+                    btn.classList.add('active');
+                }
+            });
+            // Tutup mobile menu jika terbuka
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (!mobileMenu.classList.contains('translate-x-full')) {
+                toggleMobileMenu();
+            }
+        });
+    }
+});
 
+// ==================== BAHAN BAKU ====================
 function kalkulasiHargaSatuBB(mode) {
     const prefix = mode === 'edit' ? 'edit-bb-' : 'bb-';
     const hrgBeli = getNilaiAsli(document.getElementById(prefix + 'harga-beli').value);
@@ -623,7 +666,6 @@ async function simpanEditBahanBaku() {
 }
 
 // ==================== KATEGORI ====================
-// (sama seperti sebelumnya)
 async function loadKategoriDB() {
     const { data, error } = await supabaseClient.from('kategori_db').select('*').order('nama');
     if (!error && data) {
@@ -2043,7 +2085,31 @@ async function updateDashboardEngineering() {
     });
 }
 
-// ---------- EVENT LISTENER ----------
+// ===== MENCEGAH REFRESH SAAT KEMBALI KE TAB =====
+// Simpan state di sessionStorage dan pulihkan saat halaman dimuat
+window.addEventListener('pageshow', function(event) {
+    // Jika halaman dimuat dari cache (bfcache), pulihkan state
+    if (event.persisted) {
+        const savedTab = sessionStorage.getItem('activeTab');
+        if (savedTab && document.getElementById(savedTab)) {
+            switchTab(savedTab);
+        }
+        // Simpan scroll position jika diperlukan
+        const savedScroll = sessionStorage.getItem('scrollPosition');
+        if (savedScroll) {
+            window.scrollTo(0, parseInt(savedScroll));
+        }
+    }
+});
+
+// Simpan scroll position saat meninggalkan halaman
+window.addEventListener('pagehide', function() {
+    try {
+        sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+    } catch(e) {}
+});
+
+// ===== EVENT LISTENER =====
 document.addEventListener('click', function(e) {
     const th = e.target.closest('.sortable');
     if (th && th.closest('#summary-table')) {
@@ -2074,4 +2140,10 @@ window.onload = async () => {
     const tahunNow = new Date().getFullYear();
     document.getElementById('filter-data-bulan').value = bulanNow;
     document.getElementById('filter-data-tahun').value = tahunNow;
+    
+    // Restore tab dari sessionStorage setelah semua load selesai
+    const savedTab = sessionStorage.getItem('activeTab');
+    if (savedTab && document.getElementById(savedTab)) {
+        setTimeout(() => switchTab(savedTab), 100);
+    }
 };
