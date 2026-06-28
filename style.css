@@ -155,7 +155,14 @@ input[type="number"]::-webkit-outer-spin-button {
     vertical-align: middle;
     margin-right: 6px;
 }
-
+/* style.css tambahan */
+.input-subtab {
+    transition: opacity 0.25s ease;
+}
+.input-subtab.hidden {
+    display: none;
+}
+/* Tambahan untuk subtab input */
 .input-subtab {
     transition: opacity 0.25s ease;
 }
@@ -163,96 +170,11 @@ input[type="number"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* ===== Dropdown menu (Kebab) ===== */
-.dropdown-menu {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    min-width: 140px;
+/* Style untuk tabel input penjualan */
+#table-penjualan-input tbody tr:hover {
+    background-color: #f8fafc;
 }
-.dropdown-menu.fixed-dropdown {
-    display: block;
-}
-.dropdown-menu > div {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-}
-.dropdown-menu button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background 0.15s;
-    color: #374151;
-}
-.dropdown-menu button:hover {
-    background: #f3f4f6;
-}
-.dropdown-menu button.font-bold.text-blue-600:hover {
-    background: #eff6ff;
-}
-.dropdown-menu button.font-bold.text-red-600:hover {
-    background: #fef2f2;
-}
-
-/* ===== Recipe Card Kebab Wrapper ===== */
-.recipe-card .kebab-wrapper {
-    position: relative;
-    flex-shrink: 0;
-    margin-left: 8px;
-}
-.recipe-card .kebab-btn {
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    line-height: 1;
-}
-.recipe-card .kebab-btn:hover {
-    background: rgba(255,255,255,0.35);
-}
-.recipe-card .menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-}
-.recipe-card .menu-name-wrap {
-    flex: 1;
-    min-width: 0;
-}
-.recipe-card .menu-name {
-    font-size: 1.25rem;
-    font-weight: 900;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    word-break: break-word;
-}
-.recipe-card .menu-yield {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    background: rgba(255,255,255,0.2);
-    padding: 2px 10px;
-    border-radius: 999px;
-    margin-top: 4px;
-    backdrop-filter: blur(4px);
+#table-penjualan-input input[type="number"]::-webkit-inner-spin-button,
+#table-penjualan-input input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
 }
