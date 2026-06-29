@@ -1050,6 +1050,32 @@ nav .border-b {
 }
 
 /* ================================================================
+   NAMA MENU DI CARD RESEP SELALU PUTIH DI SEMUA TEMA
+   ================================================================ */
+#recipe-wrapper .bg-gradient-to-br h3,
+#recipe-wrapper .bg-gradient-to-br .text-xl,
+#recipe-wrapper .bg-gradient-to-br .font-black,
+#recipe-wrapper .bg-gradient-to-br .tracking-wide,
+#recipe-wrapper .bg-gradient-to-br .break-words {
+    color: #ffffff !important;
+}
+/* Override semua kemungkinan override dari theme */
+.light #recipe-wrapper .bg-gradient-to-br h3,
+.light #recipe-wrapper .bg-gradient-to-br .text-xl,
+.light #recipe-wrapper .bg-gradient-to-br .font-black,
+.light #recipe-wrapper .bg-gradient-to-br .tracking-wide,
+.light #recipe-wrapper .bg-gradient-to-br .break-words {
+    color: #ffffff !important;
+}
+.dark #recipe-wrapper .bg-gradient-to-br h3,
+.dark #recipe-wrapper .bg-gradient-to-br .text-xl,
+.dark #recipe-wrapper .bg-gradient-to-br .font-black,
+.dark #recipe-wrapper .bg-gradient-to-br .tracking-wide,
+.dark #recipe-wrapper .bg-gradient-to-br .break-words {
+    color: #ffffff !important;
+}
+
+/* ================================================================
    NAVBAR DARK THEME - GELAP (sudah ditangani di atas)
    ================================================================ */
 
