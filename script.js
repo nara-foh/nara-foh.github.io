@@ -22,7 +22,7 @@ let appSettings = {
 let currentActiveTab = 'tab-direktori';
 
 // ===== TEMA =====
-let currentTheme = 'light';
+let currentTheme = 'auto'; // default auto
 function applyTheme(theme) {
     const html = document.documentElement;
     if (theme === 'auto') {
@@ -59,8 +59,8 @@ function setTheme(theme) {
     }
 }
 function loadTheme() {
-    let theme = 'light';
-    try { theme = localStorage.getItem('preferred-theme') || 'light'; } catch(e) {}
+    let theme = 'auto';
+    try { theme = localStorage.getItem('preferred-theme') || 'auto'; } catch(e) {}
     applyTheme(theme);
     const btnMap = { light: 0, dark: 1, auto: 2 };
     const btns = document.querySelectorAll('.theme-btn');
@@ -334,10 +334,11 @@ function updateUIByRole() {
     
     // URUTAN TAB: Dashboard, Directory Menu, HPP, Bahan Baku, Kategori, Data Penjualan, Settings
     const allTabs = ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'];
+    // Sekarang Settings tersedia untuk semua role, tapi isinya dibatasi
     const tabMap = {
-        staff: ['tab-dashboard', 'tab-direktori', 'tab-hpp'],
-        admin: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku'],
-        senior_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan'],
+        staff: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-settings'],
+        admin: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-settings'],
+        senior_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'],
         head_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings']
     };
     const allowed = tabMap[role] || tabMap.staff;
@@ -404,12 +405,20 @@ function updateUIByRole() {
         mobileMenuList.appendChild(btn);
     });
 
+    // Role-based visibility untuk elemen lainnya
     document.querySelectorAll('.role-admin').forEach(el => el.classList.toggle('hidden', !hasRole('admin')));
     document.querySelectorAll('.role-senior').forEach(el => el.classList.toggle('hidden', !hasRole('senior_bar')));
     document.querySelectorAll('.role-head').forEach(el => el.classList.toggle('hidden', !hasRole('head_bar')));
 
+    // Settings readonly message - hanya untuk head_bar yang bisa ubah
     const msg = document.getElementById('settings-readonly-msg');
-    if (msg) msg.classList.toggle('hidden', !isLoggedIn || hasRole('head_bar'));
+    if (msg) {
+        if (isLoggedIn && !hasRole('head_bar')) {
+            msg.classList.remove('hidden');
+        } else {
+            msg.classList.add('hidden');
+        }
+    }
 
     const userStatus = document.getElementById('user-status');
     if (isLoggedIn) {
@@ -420,6 +429,7 @@ function updateUIByRole() {
         userStatus.className = 'text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-gray-600';
     }
 
+    // Isi nilai settings
     document.getElementById('setting-hpp-limit').value = appSettings.hpp_limit;
     setOverheadType(appSettings.overhead_type);
     if (appSettings.overhead_type === 'nominal') {
@@ -434,7 +444,7 @@ function updateUIByRole() {
     loadMenuDropdownPenjualan();
     populateKategoriFilterPenjualan();
 
-    // Restore tab dari sessionStorage jika ada
+    // Restore tab dari sessionStorage
     const savedTab = sessionStorage.getItem('activeTab');
     if (savedTab && allowed.includes(savedTab)) {
         switchTab(savedTab);
@@ -2127,7 +2137,7 @@ document.addEventListener('click', function(e) {
 
 // ---------- ON LOAD ----------
 window.onload = async () => {
-    loadTheme();
+    loadTheme(); // default auto
     await inisialisasiAuth();
     await loadKategoriDB();
     const bulanNow = new Date().getMonth() + 1;
