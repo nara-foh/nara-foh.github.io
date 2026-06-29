@@ -334,12 +334,12 @@ function updateUIByRole() {
     const role = currentUser?.role || 'guest';
     console.log('🔄 updateUIByRole - role:', role);
     
-    const allTabs = ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'];
+    const allTabs = ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-discount-calculator', 'tab-settings'];
     const tabMap = {
         staff: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-settings'],
         admin: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-settings'],
-        senior_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings'],
-        head_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-settings']
+        senior_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-discount-calculator', 'tab-settings'],
+        head_bar: ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-discount-calculator', 'tab-settings']
     };
     const allowed = tabMap[role] || tabMap.staff;
     
@@ -366,6 +366,7 @@ function updateUIByRole() {
         'tab-bahan-baku': '📦 Bahan Baku',
         'tab-kategori': '🏷️ Kategori',
         'tab-data-penjualan': '📋 Data Penjualan',
+        'tab-discount-calculator': '🧮 Discount Calculator',
         'tab-settings': '⚙️ Settings'
     };
     navbar.innerHTML = '';
@@ -437,6 +438,9 @@ function updateUIByRole() {
     loadMenuDropdownPenjualan();
     populateKategoriFilterPenjualan();
 
+    // Populate discount dropdowns
+    populateDiscountDropdowns();
+
     // Pastikan loadKategoriDB dipanggil setelah role di-set
     loadKategoriDB();
 
@@ -500,6 +504,10 @@ function switchTab(tabId) {
     }
     if (tabId === 'tab-dashboard') {
         setTimeout(updateDashboardEngineering, 500);
+    }
+    if (tabId === 'tab-discount-calculator') {
+        populateDiscountDropdowns();
+        calculateDiscount(); // auto calculate on tab switch
     }
 }
 
@@ -699,6 +707,7 @@ async function loadKategoriDB() {
         renderTabelManajemenKategori();
         populateFilterKategoriDirektori();
         populateKategoriFilterPenjualan();
+        populateDiscountDropdowns(); // refresh discount dropdowns
     } else {
         console.error('❌ Gagal load kategori:', error);
     }
@@ -732,7 +741,6 @@ function renderTabelManajemenKategori() {
     const ulSub = document.getElementById('list-manajemen-sub-kategori');
     if (!ulKat || !ulSub) return;
 
-    // Perbaiki: gunakan hasRole('senior_bar') untuk menampilkan kebab menu
     const canEdit = hasRole('senior_bar');
     console.log('🔧 renderTabelManajemenKategori - canEdit:', canEdit, 'role:', currentUser?.role);
     
@@ -1145,6 +1153,10 @@ async function loadDirektori() {
     }
     if (document.getElementById('tab-data-penjualan').classList.contains('active')) {
         renderTablePenjualanInput();
+    }
+    // Refresh discount calculator if active
+    if (document.getElementById('tab-discount-calculator').classList.contains('active')) {
+        calculateDiscount();
     }
 }
 
@@ -2165,6 +2177,113 @@ async function updateDashboardEngineering() {
         html += `</div></div>`;
         container.innerHTML += html;
     });
+}
+
+// ==================== DISCOUNT CALCULATOR ====================
+function populateDiscountDropdowns() {
+    const catSelect = document.getElementById('discount-category');
+    const subSelect = document.getElementById('discount-subcategory');
+    if (!catSelect || !subSelect) return;
+
+    // Kategori
+    const currentCat = catSelect.value;
+    catSelect.innerHTML = '<option value="all">Semua Kategori</option>';
+    listKategori.forEach(k => {
+        catSelect.innerHTML += `<option value="${k.nama}">${k.nama}</option>`;
+    });
+    catSelect.value = currentCat;
+
+    // Sub Kategori
+    const currentSub = subSelect.value;
+    subSelect.innerHTML = '<option value="all">Semua Sub-Kategori</option>';
+    listSubKategori.forEach(k => {
+        subSelect.innerHTML += `<option value="${k.nama}">${k.nama}</option>`;
+    });
+    subSelect.value = currentSub;
+}
+
+function calculateDiscount() {
+    const category = document.getElementById('discount-category').value;
+    const subcategory = document.getElementById('discount-subcategory').value;
+    const discountPercent = parseFloat(document.getElementById('discount-percent').value) || 0;
+
+    let filtered = [...cachedResepSummaryData];
+    if (category !== 'all') filtered = filtered.filter(m => m.kategori === category);
+    if (subcategory !== 'all') filtered = filtered.filter(m => m.sub_kategori === subcategory);
+
+    const tbody = document.getElementById('discount-table-body');
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="text-center p-8 text-gray-400 dark:text-gray-500 italic">Tidak ada menu untuk kategori/subkategori ini.</td></tr>`;
+        document.getElementById('ds-count').innerText = '0';
+        document.getElementById('ds-rev-original').innerText = formatRp(0);
+        document.getElementById('ds-rev-discount').innerText = formatRp(0);
+        document.getElementById('ds-margin-loss').innerText = formatRp(0);
+        return;
+    }
+
+    let totalOriginalRev = 0, totalDiscRev = 0, totalMarginLoss = 0;
+    let html = '';
+    const limit = appSettings.hpp_limit;
+
+    filtered.forEach((item, index) => {
+        const discPrice = Math.round(item.harga_jual * (1 - discountPercent / 100));
+        const marginAfter = discPrice - item.totalCost;
+        const hppAfter = discPrice > 0 ? (item.totalCost / discPrice) * 100 : 0;
+        const marginLoss = item.margin - marginAfter;
+
+        totalOriginalRev += item.harga_jual;
+        totalDiscRev += discPrice;
+        if (marginLoss > 0) totalMarginLoss += marginLoss;
+
+        // Warna
+        let marginAfterColor = '';
+        if (marginAfter < 0) marginAfterColor = 'text-red-600 dark:text-red-400 font-bold';
+        else if (marginAfter > 0) marginAfterColor = 'text-emerald-600 dark:text-emerald-400 font-bold';
+        else marginAfterColor = 'text-gray-900 dark:text-gray-100';
+
+        let hppAfterColor = '';
+        if (hppAfter > limit) hppAfterColor = 'text-red-600 dark:text-red-400 font-bold';
+        else if (hppAfter < limit) hppAfterColor = 'text-emerald-600 dark:text-emerald-400 font-bold';
+        else hppAfterColor = 'text-gray-900 dark:text-gray-100';
+
+        let status = '';
+        let statusColor = '';
+        if (marginAfter < 0) {
+            status = '⚠️ Loss';
+            statusColor = 'text-red-600 dark:text-red-400';
+        } else if (marginAfter > 0 && marginAfter < item.margin) {
+            status = '📉 Eroded';
+            statusColor = 'text-amber-500 dark:text-amber-400';
+        } else if (marginAfter >= item.margin) {
+            status = '✅ Safe';
+            statusColor = 'text-emerald-600 dark:text-emerald-400';
+        } else {
+            status = '⚪ Neutral';
+            statusColor = 'text-gray-400';
+        }
+
+        html += `
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="p-3 text-center">${index + 1}</td>
+                <td class="p-3 font-semibold text-gray-700 dark:text-gray-300">${item.nama}</td>
+                <td class="p-3 text-right font-semibold text-gray-700 dark:text-gray-300">${formatRp(item.harga_jual)}</td>
+                <td class="p-3 text-center font-bold text-blue-600 dark:text-blue-400">${discountPercent.toFixed(1)}%</td>
+                <td class="p-3 text-right font-bold text-gray-800 dark:text-white">${formatRp(discPrice)}</td>
+                <td class="p-3 text-right text-gray-500 dark:text-gray-400">${formatRp(item.totalCost)}</td>
+                <td class="p-3 text-right ${item.margin < 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'} font-bold">${formatRp(item.margin)}</td>
+                <td class="p-3 text-right ${marginAfterColor}">${formatRp(marginAfter)}</td>
+                <td class="p-3 text-center ${hppAfterColor}">${hppAfter.toFixed(1)}%</td>
+                <td class="p-3 text-center ${statusColor} text-sm font-bold">${status}</td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+
+    document.getElementById('ds-count').innerText = filtered.length;
+    document.getElementById('ds-rev-original').innerText = formatRp(totalOriginalRev);
+    document.getElementById('ds-rev-discount').innerText = formatRp(totalDiscRev);
+    document.getElementById('ds-margin-loss').innerText = formatRp(totalMarginLoss);
 }
 
 // ---------- EVENT LISTENER ----------
