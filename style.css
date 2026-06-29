@@ -1119,3 +1119,14 @@ body {
 .light nav .bg-white\/90 {
     background-color: rgba(255, 255, 255, 0.9) !important;
 }
+
+/* Warna hitam untuk kedua tema */
+.text-gray-900 {
+    color: #0f172a !important;
+}
+.dark .text-gray-900 {
+    color: #f1f5f9 !important;
+}
+.dark .text-gray-100 {
+    color: #f1f5f9 !important;
+}
