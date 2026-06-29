@@ -1095,3 +1095,34 @@ body {
 .light .role-head.hidden {
     display: none !important;
 }
+
+/* Tambahkan di bagian akhir style.css */
+
+/* ================================================================
+   FIX: BRAND TEXT COLOR IN LIGHT THEME (HITAM)
+   ================================================================ */
+.light #brand-link h1 {
+    color: #0f172a !important;
+    background: none !important;
+    -webkit-text-fill-color: #0f172a !important;
+    background-clip: unset !important;
+}
+
+/* Pastikan di dark theme tetap putih */
+.dark #brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Navbar background di light theme - terang */
+.light nav {
+    background-color: #ffffff !important;
+    border-bottom-color: #e2e8f0 !important;
+}
+.light nav .bg-white\/90 {
+    background-color: #ffffff !important;
+}
+.light nav .border-gray-200 {
+    border-color: #e2e8f0 !important;
+}
