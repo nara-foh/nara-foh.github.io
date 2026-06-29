@@ -1,4 +1,4 @@
-/* style.css - FULL VERSION with navbar dark background fix */
+/* style.css - FULL VERSION with navbar dark, active tab black text in dark, and overhead badge black text */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -31,13 +31,10 @@
     width: 100%;
 }
 .dark .btn-tab.active {
-    color: #FF3B30;
+    color: #000000 !important; /* hitam di tema gelap */
 }
 .dark .btn-tab.active::after {
-    background-color: #FF3B30;
-}
-.dark .btn-tab::after {
-    background-color: #FF3B30;
+    background-color: #000000 !important;
 }
 
 @keyframes fadeIn {
@@ -1029,31 +1026,64 @@ body {
 }
 
 /* ================================================================
-   BRAND (F&B PRO) - ALWAYS VISIBLE WITH THEME-SPECIFIC COLORS
+   BRAND (F&B PRO) AND RECIPE CARD NAMES - ALWAYS WHITE
    ================================================================ */
 #brand-link h1 {
-    background: none !important;
-    -webkit-text-fill-color: unset !important;
-    background-clip: unset !important;
-    color: #0f172a; /* fallback */
-}
-
-/* Light theme: black text */
-.light #brand-link h1 {
-    color: #0f172a !important;
-}
-
-/* Dark theme: white text, navbar already dark via bg-gray-900/90 */
-.dark #brand-link h1 {
     color: #ffffff !important;
 }
-
-/* Ensure recipe card names stay white */
 #recipe-wrapper .bg-gradient-to-br h3 {
     color: #ffffff !important;
 }
+.light #brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
 .light #recipe-wrapper .bg-gradient-to-br h3 {
     color: #ffffff !important;
+}
+
+/* ================================================================
+   NAVBAR DARK THEME - GELAP
+   ================================================================ */
+.dark nav {
+    background-color: #0f172a !important;
+    border-bottom-color: #1e293b !important;
+}
+.dark nav .bg-white\/90 {
+    background-color: #0f172a !important;
+}
+.dark nav .border-gray-200 {
+    border-color: #1e293b !important;
+}
+.dark nav .bg-white\/80 {
+    background-color: #0f172a !important;
+}
+
+/* ================================================================
+   ACTIVE TAB TEXT - HITAM DI TEMA GELAP
+   ================================================================ */
+.dark .btn-tab.active {
+    color: #000000 !important;
+}
+.dark .btn-tab.active::after {
+    background-color: #000000 !important;
+}
+
+/* Mobile menu active tab */
+.dark .btn-tab-mobile.bg-blue-50 {
+    background-color: #e2e8f0 !important;
+    color: #000000 !important;
+}
+
+/* ================================================================
+   OVERHEAD STATUS BADGE - HITAM DI SEMUA TEMA
+   ================================================================ */
+#overhead-status-badge {
+    color: #000000 !important;
+}
+.dark #overhead-status-badge {
+    color: #000000 !important;
 }
 
 /* ================================================================
@@ -1064,69 +1094,4 @@ body {
 }
 .light .role-head.hidden {
     display: none !important;
-}
-/* Visibility handled via JavaScript */
-
-/* ================================================================
-   NAVBAR DARK THEME - BACKGROUND GELAP (SESUAI KOTAK TEMA)
-   ================================================================ */
-.dark nav {
-    background-color: #1e293b !important;
-    border-bottom-color: #334155 !important;
-}
-
-.dark nav .bg-white\/90 {
-    background-color: #1e293b !important;
-}
-
-.dark nav .border-b {
-    border-color: #334155 !important;
-}
-
-/* Pastikan teks navbar tetap putih di dark */
-.dark nav .text-gray-500 {
-    color: #94a3b8 !important;
-}
-.dark nav .text-gray-700 {
-    color: #e2e8f0 !important;
-}
-.dark nav .text-gray-800 {
-    color: #ffffff !important;
-}
-.dark nav .text-gray-900 {
-    color: #ffffff !important;
-}
-
-/* Dark navbar button hover */
-.dark nav .hover\:bg-gray-100:hover {
-    background-color: #334155 !important;
-}
-.dark nav .hover\:bg-gray-200:hover {
-    background-color: #334155 !important;
-}
-
-/* Dark navbar border left */
-.dark nav .border-l-2 {
-    border-color: #334155 !important;
-}
-
-/* Light theme navbar tetap seperti sebelumnya */
-.light nav {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-    border-bottom-color: #e2e8f0 !important;
-}
-
-.light nav .bg-white\/90 {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-}
-
-/* Warna hitam untuk kedua tema */
-.text-gray-900 {
-    color: #0f172a !important;
-}
-.dark .text-gray-900 {
-    color: #f1f5f9 !important;
-}
-.dark .text-gray-100 {
-    color: #f1f5f9 !important;
 }
