@@ -1,4 +1,4 @@
-/* style.css - FINAL VERSION with all fixes */
+/* style.css - FINAL VERSION with all requested fixes */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -939,7 +939,6 @@ body {
 }
 
 /* ===== PERBAIKAN KHUSUS UNTUK HPP CARD DI LIGHT THEME ===== */
-/* Bagian bg-gray-800 di dalam tab-hpp */
 .light .bg-gray-800.text-white {
     background-color: #e2e8f0 !important;
     color: #0f172a !important;
@@ -966,7 +965,6 @@ body {
     border-color: #94a3b8 !important;
 }
 
-/* Untuk dark theme, bg-gray-800 tetap gelap dengan teks terang */
 .dark .bg-gray-800.text-white {
     background-color: #1e293b !important;
     color: #f8fafc !important;
@@ -994,52 +992,38 @@ body {
 }
 
 /* ================================================================
-   HEADER TEXT IN LIGHT THEME - MAKE SUBTEXT (p) WHITE
+   WHITE HEADER DESCRIPTIONS (both themes)
    ================================================================ */
-.light .bg-gradient-to-r h2,
-.light .bg-gradient-to-r .text-white {
+.bg-gradient-to-r p,
+.bg-gradient-to-r .text-sm,
+.bg-gradient-to-r .opacity-90 {
     color: #ffffff !important;
 }
-.light .bg-gradient-to-r p,
-.light .bg-gradient-to-r .text-sm.opacity-90 {
+/* Ensure the main heading stays white too */
+.bg-gradient-to-r h2 {
     color: #ffffff !important;
 }
 
 /* ================================================================
-   NAVBAR BRAND "F&B PRO" - NO BACKGROUND, FOLLOW NAVBAR
+   BRAND (F&B PRO) BACKGROUND MATCH NAVBAR
    ================================================================ */
-/* Remove custom background from light theme brand */
-.light #brand-link {
-    background-color: transparent !important;
+/* Remove custom background; make it transparent like navbar */
+#brand-link {
+    background: transparent !important;
     padding: 0 !important;
     border-radius: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
 }
+/* In light theme, text should be dark to be visible on light navbar */
 .light #brand-link h1 {
+    color: #0f172a !important;
     background: none !important;
-    -webkit-text-fill-color: initial !important;
+    -webkit-text-fill-color: #0f172a !important;
     background-clip: unset !important;
-    color: #1e3a5f !important;
 }
-/* In dark theme, keep as is */
+/* In dark theme, text should be light to be visible on dark navbar */
 .dark #brand-link h1 {
     color: #f8fafc !important;
-}
-
-/* ================================================================
-   FIX FOR IMPORT/EXPORT SECTIONS (LIGHT THEME)
-   ================================================================ */
-.light .bg-gradient-to-r.from-blue-50 p,
-.light .bg-gradient-to-r.from-purple-50 p,
-.light .bg-gradient-to-r.from-green-50 p,
-.light .bg-gradient-to-r.from-amber-50 p {
-    color: #0f172a !important;
-}
-.light .bg-gradient-to-r.from-blue-50 .text-blue-700,
-.light .bg-gradient-to-r.from-purple-50 .text-purple-700,
-.light .bg-gradient-to-r.from-green-50 .text-green-700,
-.light .bg-gradient-to-r.from-amber-50 .text-amber-700 {
-    color: #0f172a !important;
+    background: none !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    background-clip: unset !important;
 }
