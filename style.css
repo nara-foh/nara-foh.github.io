@@ -1,7 +1,4 @@
-/* ================================================================
-   style.css - FULL VERSION
-   ================================================================ */
-
+/* style.css - FULL VERSION with all fixes */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -10,76 +7,6 @@
     display: block; 
 }
 
-/* ===== SIDEBAR ===== */
-#sidebar {
-    width: 16rem;
-    background-color: #0f172a;
-    transition: transform 0.3s ease-in-out;
-    z-index: 40;
-    overflow-y: auto;
-}
-#sidebar-overlay {
-    z-index: 35;
-}
-#hamburger-btn {
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background-color: #0f172a;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s;
-}
-#hamburger-btn:hover {
-    background-color: #1e293b;
-}
-
-.sidebar-nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.6rem 1rem;
-    border-radius: 0.5rem;
-    color: #94a3b8;
-    transition: all 0.15s ease;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-.sidebar-nav-item:hover {
-    background-color: #334155;
-    color: #f1f5f9;
-}
-.sidebar-nav-item.active {
-    background-color: #FF3B30;
-    color: #ffffff;
-}
-.sidebar-nav-item.active:hover {
-    background-color: #e0352a;
-}
-.dark .sidebar-nav-item {
-    color: #94a3b8;
-}
-.dark .sidebar-nav-item:hover {
-    background-color: #1e293b;
-    color: #f8fafc;
-}
-.dark .sidebar-nav-item.active {
-    background-color: #FF3B30;
-    color: #ffffff;
-}
-
-/* ===== BRAND LINK ===== */
-#brand-link {
-    cursor: pointer;
-}
-#brand-link h1 {
-    color: #ffffff !important;
-}
-
-/* ===== BUTTON TAB ===== */
 .btn-tab {
     position: relative;
     padding-bottom: 0.5rem;
@@ -92,13 +19,13 @@
     height: 3px;
     bottom: 0;
     left: 50%;
-    background-color: #FF3B30;
+    background-color: #FF3B30; 
     transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 3px 3px 0 0;
 }
-.btn-tab.active {
-    color: #FF3B30;
+.btn-tab.active { 
+    color: #FF3B30; 
 }
 .btn-tab.active::after {
     width: 100%;
@@ -110,29 +37,29 @@
     background-color: #000000 !important;
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-.modal-enter {
-    animation: modalFadeIn 0.2s ease-out forwards;
-}
-@keyframes modalFadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+
+.modal-enter { 
+    animation: modalFadeIn 0.2s ease-out forwards; 
 }
 
-/* ===== SCROLLBAR ===== */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+@keyframes modalFadeIn { 
+    from { opacity: 0; transform: scale(0.95); } 
+    to { opacity: 1; transform: scale(1); } 
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
+
+.custom-scrollbar::-webkit-scrollbar { 
+    width: 6px; 
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 10px; 
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+    background: #94a3b8; 
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #475569;
@@ -141,7 +68,6 @@
     background: #64748b;
 }
 
-/* ===== LOADER ===== */
 .loader {
     border: 4px solid rgba(255, 255, 255, 0.2);
     border-top: 4px solid #ffffff;
@@ -151,21 +77,21 @@
     animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
     margin: 0 auto 16px auto;
 }
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* ===== INPUTS ===== */
 input, select, button {
     transition: all 0.2s ease;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
 }
 
-/* ===== SORTABLE TABLE ===== */
 .sortable {
     cursor: pointer;
     user-select: none;
@@ -193,7 +119,6 @@ input[type="number"]::-webkit-outer-spin-button {
     cursor: pointer;
 }
 
-/* ===== LOGIN ===== */
 #login-overlay {
     transition: opacity 0.3s ease;
 }
@@ -201,7 +126,7 @@ input[type="number"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* ===== TOAST ===== */
+/* Toast */
 #toast-container {
     pointer-events: none;
 }
@@ -222,7 +147,7 @@ input[type="number"]::-webkit-outer-spin-button {
     to { opacity: 0; transform: translateX(50px) scale(0.9); }
 }
 
-/* ===== OVERHEAD TOGGLE ===== */
+/* Overhead Toggle */
 .overhead-type-btn {
     color: #64748b;
     background: transparent;
@@ -266,7 +191,7 @@ input[type="number"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* ===== TABLE PENJUALAN ===== */
+/* Tabel penjualan */
 #table-penjualan-input tbody tr:hover {
     background-color: #f8fafc;
 }
@@ -278,7 +203,7 @@ input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
 }
 
-/* ===== KEBBAB MENU ===== */
+/* ===== PERBAIKAN KEBBAB MENU ===== */
 #table-bahan-baku .dropdown-menu,
 #list-manajemen-kategori .dropdown-menu,
 #list-manajemen-sub-kategori .dropdown-menu,
@@ -332,6 +257,7 @@ input[type="number"]::-webkit-outer-spin-button {
     border-top-color: #374151;
 }
 
+/* Kebab buttons - both themes */
 .kebab-btn {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -361,6 +287,7 @@ body {
     color: #e2e8f0;
 }
 
+/* --- LIGHT THEME OVERRIDES --- */
 .light .bg-white {
     background-color: #ffffff !important;
 }
@@ -386,6 +313,7 @@ body {
     border-color: #94a3b8 !important;
 }
 
+/* ALL TEXT - LIGHT THEME - DARK AND READABLE */
 .light,
 .light *,
 .light .text-gray-400,
@@ -409,6 +337,8 @@ body {
 .light .text-xl {
     color: #0f172a !important;
 }
+
+/* But keep muted colors for specific elements */
 .light .text-gray-400 {
     color: #475569 !important;
 }
@@ -424,6 +354,8 @@ body {
 .light .text-gray-800 {
     color: #0f172a !important;
 }
+
+/* Override for elements inside white cards */
 .light .bg-white *,
 .light .bg-gray-50 *,
 .light .bg-gray-100 * {
@@ -438,7 +370,7 @@ body {
     color: #334155 !important;
 }
 
-/* HPP CARD LIGHT */
+/* === HPP CARD (bg-gray-800) IN LIGHT THEME === */
 .light .bg-gray-800 {
     background-color: #e2e8f0 !important;
 }
@@ -459,7 +391,7 @@ body {
     border-color: #94a3b8 !important;
 }
 
-/* HPP CARD DARK */
+/* === DARK THEME HPP CARD === */
 .dark .bg-gray-800 {
     background-color: #1e293b !important;
 }
@@ -480,7 +412,7 @@ body {
     border-color: #475569 !important;
 }
 
-/* INPUTS LIGHT */
+/* INPUTS - LIGHT */
 .light input,
 .light select,
 .light textarea {
@@ -500,7 +432,7 @@ body {
     outline: none;
 }
 
-/* LABELS LIGHT */
+/* LABELS - LIGHT */
 .light label,
 .light .block.text-sm,
 .light .text-xs.font-bold,
@@ -510,7 +442,7 @@ body {
     color: #0f172a !important;
 }
 
-/* RECIPE CARDS LIGHT */
+/* RECIPE CARDS - LIGHT */
 .light #recipe-wrapper .text-gray-400,
 .light #recipe-wrapper .text-gray-500,
 .light #recipe-wrapper .text-gray-600,
@@ -529,7 +461,7 @@ body {
     color: #475569 !important;
 }
 
-/* SUMMARY TABLE LIGHT */
+/* SUMMARY TABLE - LIGHT */
 .light #summary-table .text-gray-400,
 .light #summary-table .text-gray-500,
 .light #summary-table .text-gray-600,
@@ -541,7 +473,7 @@ body {
     color: #475569 !important;
 }
 
-/* DASHBOARD LIGHT */
+/* DASHBOARD - LIGHT */
 .light .text-gray-400.uppercase {
     color: #475569 !important;
 }
@@ -552,7 +484,7 @@ body {
     color: #1e293b !important;
 }
 
-/* MODAL LIGHT */
+/* MODAL - LIGHT */
 .light .modal-enter .text-gray-400,
 .light .modal-enter .text-gray-500,
 .light .modal-enter .text-gray-600,
@@ -564,7 +496,7 @@ body {
     color: #475569 !important;
 }
 
-/* CATEGORY TAGS LIGHT */
+/* CATEGORY TAGS - LIGHT */
 .light .bg-blue-50.text-blue-700 {
     color: #1e3a5f !important;
     background-color: #dbeafe !important;
@@ -573,7 +505,7 @@ body {
     border-color: #93c5fd !important;
 }
 
-/* DROPDOWN LIGHT */
+/* DROPDOWN - LIGHT */
 .light .dropdown-menu {
     background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
@@ -585,7 +517,7 @@ body {
     background-color: #f1f5f9 !important;
 }
 
-/* SETTINGS LIGHT */
+/* SETTINGS - LIGHT */
 .light #tab-settings .text-gray-400,
 .light #tab-settings .text-gray-500,
 .light #tab-settings .text-gray-600,
@@ -597,7 +529,7 @@ body {
     color: #475569 !important;
 }
 
-/* PENJUALAN TABLES LIGHT */
+/* PENJUALAN TABLES - LIGHT */
 .light #table-penjualan .text-gray-400,
 .light #table-penjualan .text-gray-500,
 .light #table-penjualan .text-gray-600,
@@ -611,7 +543,7 @@ body {
     color: #0f172a !important;
 }
 
-/* BAHAN BAKU TABLE LIGHT */
+/* BAHAN BAKU TABLE - LIGHT */
 .light #table-bahan-baku .text-gray-400,
 .light #table-bahan-baku .text-gray-500,
 .light #table-bahan-baku .text-gray-600,
@@ -623,7 +555,7 @@ body {
     color: #475569 !important;
 }
 
-/* KATEGORI LIST LIGHT */
+/* KATEGORI LIST - LIGHT */
 .light #list-manajemen-kategori .text-gray-400,
 .light #list-manajemen-kategori .text-gray-500,
 .light #list-manajemen-kategori .text-gray-600,
@@ -665,6 +597,7 @@ body {
     border-color: #475569 !important;
 }
 
+/* ALL TEXT - DARK THEME - BRIGHT AND READABLE */
 .dark,
 .dark *,
 .dark .text-gray-400,
@@ -688,6 +621,7 @@ body {
 .dark .text-xl {
     color: #f1f5f9 !important;
 }
+
 .dark .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -703,6 +637,8 @@ body {
 .dark .text-gray-800 {
     color: #ffffff !important;
 }
+
+/* Override for elements inside cards */
 .dark .bg-white *,
 .dark .bg-gray-50 *,
 .dark .bg-gray-100 * {
@@ -729,7 +665,7 @@ body {
     color: #ffffff !important;
 }
 
-/* INPUTS DARK */
+/* INPUTS - DARK */
 .dark input,
 .dark select,
 .dark textarea {
@@ -749,7 +685,7 @@ body {
     outline: none;
 }
 
-/* LABELS DARK */
+/* LABELS - DARK */
 .dark label,
 .dark .block.text-sm,
 .dark .text-xs.font-bold,
@@ -759,7 +695,7 @@ body {
     color: #f1f5f9 !important;
 }
 
-/* RECIPE CARDS DARK */
+/* RECIPE CARDS - DARK */
 .dark #recipe-wrapper .text-gray-400,
 .dark #recipe-wrapper .text-gray-500,
 .dark #recipe-wrapper .text-gray-600,
@@ -783,7 +719,7 @@ body {
     color: #ffffff !important;
 }
 
-/* SUMMARY TABLE DARK */
+/* SUMMARY TABLE - DARK */
 .dark #summary-table .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -800,7 +736,7 @@ body {
     color: #ffffff !important;
 }
 
-/* DASHBOARD DARK */
+/* DASHBOARD - DARK */
 .dark .text-gray-400.uppercase {
     color: #94a3b8 !important;
 }
@@ -817,7 +753,7 @@ body {
     color: #cbd5e1 !important;
 }
 
-/* MODAL DARK */
+/* MODAL - DARK */
 .dark .modal-enter .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -834,7 +770,7 @@ body {
     color: #ffffff !important;
 }
 
-/* CATEGORY TAGS DARK */
+/* CATEGORY TAGS - DARK */
 .dark .bg-blue-50.text-blue-700 {
     color: #93c5fd !important;
     background-color: #1e3a5f !important;
@@ -843,7 +779,7 @@ body {
     border-color: #3b82f6 !important;
 }
 
-/* DROPDOWN DARK */
+/* DROPDOWN - DARK */
 .dark .dropdown-menu {
     background-color: #1e293b !important;
     border-color: #475569 !important;
@@ -855,7 +791,7 @@ body {
     background-color: #2d3748 !important;
 }
 
-/* SETTINGS DARK */
+/* SETTINGS - DARK */
 .dark #tab-settings .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -872,7 +808,7 @@ body {
     color: #ffffff !important;
 }
 
-/* PENJUALAN TABLES DARK */
+/* PENJUALAN TABLES - DARK */
 .dark #table-penjualan .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -904,7 +840,7 @@ body {
     color: #ffffff !important;
 }
 
-/* BAHAN BAKU TABLE DARK */
+/* BAHAN BAKU TABLE - DARK */
 .dark #table-bahan-baku .text-gray-400 {
     color: #94a3b8 !important;
 }
@@ -921,7 +857,7 @@ body {
     color: #ffffff !important;
 }
 
-/* KATEGORI LIST DARK */
+/* KATEGORI LIST - DARK */
 .dark #list-manajemen-kategori .text-gray-400,
 .dark #list-manajemen-kategori .text-gray-500,
 .dark #list-manajemen-kategori .text-gray-600,
@@ -935,7 +871,7 @@ body {
     color: #e2e8f0 !important;
 }
 
-/* ===== THEME TOGGLE BUTTONS ===== */
+/* THEME TOGGLE BUTTONS - BOTH */
 .theme-btn {
     transition: all 0.2s ease;
 }
@@ -966,7 +902,7 @@ body {
     border-color: #FF3B30 !important;
 }
 
-/* ===== USER STATUS ===== */
+/* NAVBAR USER STATUS - BOTH */
 #user-status {
     color: #FF3B30 !important;
     background-color: rgba(255, 59, 48, 0.1) !important;
@@ -978,7 +914,7 @@ body {
     border-color: rgba(255, 59, 48, 0.3) !important;
 }
 
-/* ===== SCROLLBAR GLOBAL ===== */
+/* SCROLLBAR - BOTH */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -999,7 +935,62 @@ body {
     background: #64748b;
 }
 
-/* ===== HEADER DESCRIPTIONS ===== */
+/* ===== PERBAIKAN KHUSUS UNTUK HPP CARD DI LIGHT THEME ===== */
+.light .bg-gray-800.text-white {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+.light .bg-gray-800 .text-gray-300 {
+    color: #334155 !important;
+}
+.light .bg-gray-800 .text-white {
+    color: #0f172a !important;
+}
+.light .bg-gray-800 .font-black {
+    color: #0f172a !important;
+}
+.light .bg-gray-800 .font-bold.text-emerald-400 {
+    color: #0b7a4a !important;
+}
+.light .bg-gray-800 .font-bold.text-red-500 {
+    color: #b91c1c !important;
+}
+.light .bg-gray-800 .text-blue-300 {
+    color: #1e40af !important;
+}
+.light .bg-gray-800 .border-gray-600 {
+    border-color: #94a3b8 !important;
+}
+
+.dark .bg-gray-800.text-white {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+.dark .bg-gray-800 .text-gray-300 {
+    color: #94a3b8 !important;
+}
+.dark .bg-gray-800 .text-white {
+    color: #f8fafc !important;
+}
+.dark .bg-gray-800 .font-black {
+    color: #f8fafc !important;
+}
+.dark .bg-gray-800 .font-bold.text-emerald-400 {
+    color: #34d399 !important;
+}
+.dark .bg-gray-800 .font-bold.text-red-500 {
+    color: #f87171 !important;
+}
+.dark .bg-gray-800 .text-blue-300 {
+    color: #93c5fd !important;
+}
+.dark .bg-gray-800 .border-gray-600 {
+    border-color: #475569 !important;
+}
+
+/* ================================================================
+   WHITE HEADER DESCRIPTIONS (both themes)
+   ================================================================ */
 .bg-gradient-to-r .text-sm.opacity-90,
 .bg-gradient-to-r p {
     color: #ffffff !important;
@@ -1008,7 +999,9 @@ body {
     color: #ffffff !important;
 }
 
-/* ===== SUB-DESCRIPTIONS IN IMPORT/EXPORT SECTIONS ===== */
+/* ================================================================
+   SUB-DESCRIPTIONS IN IMPORT/EXPORT SECTIONS - BLACK IN LIGHT THEME
+   ================================================================ */
 .light .bg-gradient-to-r.from-blue-50 p,
 .light .bg-gradient-to-r.from-purple-50 p,
 .light .bg-gradient-to-r.from-green-50 p,
@@ -1032,7 +1025,9 @@ body {
     color: #ffffff !important;
 }
 
-/* ===== NAVBAR BACKGROUND ===== */
+/* ================================================================
+   NAVBAR BACKGROUND SELALU HITAM DI SEMUA TEMA
+   ================================================================ */
 nav,
 nav .bg-white\/90,
 nav .bg-white\/80,
@@ -1044,7 +1039,19 @@ nav .border-b {
     border-color: #1e293b !important;
 }
 
-/* ===== RECIPE CARD NAMES ===== */
+/* ================================================================
+   F&B PRO TEXT SELALU PUTIH DI SEMUA TEMA
+   ================================================================ */
+#brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-clip: unset !important;
+}
+
+/* ================================================================
+   NAMA MENU DI CARD RESEP SELALU PUTIH DI SEMUA TEMA
+   ================================================================ */
 #recipe-wrapper .bg-gradient-to-br h3,
 #recipe-wrapper .bg-gradient-to-br .text-xl,
 #recipe-wrapper .bg-gradient-to-br .font-black,
@@ -1052,6 +1059,7 @@ nav .border-b {
 #recipe-wrapper .bg-gradient-to-br .break-words {
     color: #ffffff !important;
 }
+/* Override semua kemungkinan override dari theme */
 .light #recipe-wrapper .bg-gradient-to-br h3,
 .light #recipe-wrapper .bg-gradient-to-br .text-xl,
 .light #recipe-wrapper .bg-gradient-to-br .font-black,
@@ -1067,19 +1075,29 @@ nav .border-b {
     color: #ffffff !important;
 }
 
-/* ===== ACTIVE TAB TEXT - HITAM DI TEMA GELAP ===== */
+/* ================================================================
+   NAVBAR DARK THEME - GELAP (sudah ditangani di atas)
+   ================================================================ */
+
+/* ================================================================
+   ACTIVE TAB TEXT - HITAM DI TEMA GELAP
+   ================================================================ */
 .dark .btn-tab.active {
     color: #000000 !important;
 }
 .dark .btn-tab.active::after {
     background-color: #000000 !important;
 }
+
+/* Mobile menu active tab */
 .dark .btn-tab-mobile.bg-blue-50 {
     background-color: #e2e8f0 !important;
     color: #000000 !important;
 }
 
-/* ===== OVERHEAD STATUS BADGE ===== */
+/* ================================================================
+   OVERHEAD STATUS BADGE - HITAM DI SEMUA TEMA
+   ================================================================ */
 #overhead-status-badge {
     color: #000000 !important;
 }
@@ -1087,7 +1105,10 @@ nav .border-b {
     color: #000000 !important;
 }
 
-/* ===== KATEGORI DARK ===== */
+/* ================================================================
+   PERBAIKAN KONTRAST UNTUK TEKS DI KATEGORI (TEMA GELAP)
+   ================================================================ */
+/* Sub-judul "Integrasi Kategori Master" dan deskripsi */
 .dark .bg-purple-50 .font-bold,
 .dark .bg-purple-50 .text-sm,
 .dark .bg-purple-50 .text-purple-700,
@@ -1097,6 +1118,8 @@ nav .border-b {
 .dark .bg-purple-50 .text-purple-700 {
     color: #c4b5fd !important;
 }
+
+/* Tombol "+ Tambah Baru" di kategori */
 .dark .bg-blue-100.text-blue-700,
 .dark .bg-indigo-100.text-indigo-700 {
     color: #93c5fd !important;
@@ -1106,16 +1129,25 @@ nav .border-b {
 .dark .bg-indigo-100.text-indigo-700:hover {
     background-color: #1e4a7a !important;
 }
+
+/* Nama kategori dan sub-kategori di list */
 .dark #list-manajemen-kategori .font-semibold,
 .dark #list-manajemen-sub-kategori .font-semibold {
     color: #e2e8f0 !important;
 }
+
+/* Label "Master Kategori" dan "Master Sub-Kategori" */
 .dark .text-\[#1e3a5f\],
 .dark .text-indigo-800 {
     color: #93c5fd !important;
 }
+.dark .text-\[#1e3a5f\] {
+    color: #93c5fd !important;
+}
 
-/* ===== SETTINGS DARK ===== */
+/* ================================================================
+   PERBAIKAN KONTRAST UNTUK TOMBOL SETTINGS (TEMA GELAP)
+   ================================================================ */
 .dark #btn-simpan-settings {
     background-color: #FF3B30 !important;
     color: #ffffff !important;
@@ -1124,7 +1156,9 @@ nav .border-b {
     background-color: #e0352a !important;
 }
 
-/* ===== ROLE HEAD ===== */
+/* ================================================================
+   SETTINGS - ALL USERS CAN ACCESS THEME, ONLY HEAD CAN ACCESS OTHERS
+   ================================================================ */
 .role-head.hidden {
     display: none !important;
 }
@@ -1132,31 +1166,42 @@ nav .border-b {
     display: none !important;
 }
 
-/* ===== TEKS KHUSUS TETAP HITAM ===== */
+/* ================================================================
+   TEKS KHUSUS TETAP HITAM DI SEMUA TEMA
+   ================================================================ */
+/* "Import/Export Resep" - di tab HPP */
 .light .bg-gradient-to-r.from-blue-50 .font-bold.text-blue-800,
 .dark .bg-gradient-to-r.from-blue-50 .font-bold.text-blue-800,
 .light .bg-gradient-to-r.from-blue-50 .text-blue-800,
 .dark .bg-gradient-to-r.from-blue-50 .text-blue-800 {
     color: #0f172a !important;
 }
+
+/* "Sistem Import Cerdas" - di tab Bahan Baku */
 .light .bg-gradient-to-r.from-green-50 .font-bold.text-green-800,
 .dark .bg-gradient-to-r.from-green-50 .font-bold.text-green-800,
 .light .bg-gradient-to-r.from-green-50 .text-green-800,
 .dark .bg-gradient-to-r.from-green-50 .text-green-800 {
     color: #0f172a !important;
 }
+
+/* "Integrasi Kategori Master" - di tab Kategori */
 .light .bg-gradient-to-r.from-purple-50 .font-bold.text-purple-800,
 .dark .bg-gradient-to-r.from-purple-50 .font-bold.text-purple-800,
 .light .bg-gradient-to-r.from-purple-50 .text-purple-800,
 .dark .bg-gradient-to-r.from-purple-50 .text-purple-800 {
     color: #0f172a !important;
 }
+
+/* "Import/Export Penjualan" - di tab Data Penjualan */
 .light .bg-gradient-to-r.from-amber-50 .font-bold.text-amber-800,
 .dark .bg-gradient-to-r.from-amber-50 .font-bold.text-amber-800,
 .light .bg-gradient-to-r.from-amber-50 .text-amber-800,
 .dark .bg-gradient-to-r.from-amber-50 .text-amber-800 {
     color: #0f172a !important;
 }
+
+/* Deskripsi di bawah judul tersebut (teks kecil) */
 .light .bg-gradient-to-r.from-blue-50 .text-sm,
 .dark .bg-gradient-to-r.from-blue-50 .text-sm,
 .light .bg-gradient-to-r.from-green-50 .text-sm,
@@ -1167,6 +1212,8 @@ nav .border-b {
 .dark .bg-gradient-to-r.from-amber-50 .text-sm {
     color: #0f172a !important;
 }
+
+/* Pastikan tombol di dalam area tersebut tetap terlihat */
 .light .bg-gradient-to-r.from-blue-50 .border-blue-300,
 .dark .bg-gradient-to-r.from-blue-50 .border-blue-300,
 .light .bg-gradient-to-r.from-green-50 .border-green-300,
@@ -1176,31 +1223,4 @@ nav .border-b {
 .light .bg-gradient-to-r.from-amber-50 .border-amber-300,
 .dark .bg-gradient-to-r.from-amber-50 .border-amber-300 {
     border-color: #94a3b8 !important;
-}
-
-/* ===== RESPONSIVE SIDEBAR ===== */
-@media (min-width: 1024px) {
-    #sidebar {
-        transform: translateX(0) !important;
-    }
-    #sidebar-overlay {
-        display: none !important;
-    }
-    #hamburger-btn {
-        display: none !important;
-    }
-    #main-content {
-        margin-left: 16rem !important;
-    }
-}
-@media (max-width: 1023px) {
-    #sidebar {
-        transform: translateX(-100%);
-    }
-    #sidebar.open {
-        transform: translateX(0);
-    }
-    #main-content {
-        margin-left: 0 !important;
-    }
 }
