@@ -1,7 +1,3 @@
-// ================================================================
-// script.js - FULL VERSION
-// ================================================================
-
 const SUPABASE_URL = 'https://mslsgobvzzxxkwfvpjhx.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zbHNnb2J2enp4eGt3ZnZwamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMzAzMDEsImV4cCI6MjA5NzgwNjMwMX0.V7pUmC3En3O0pc3VamJUm9eq7cnB7UFLi333LmtnJqQ';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -24,33 +20,6 @@ let appSettings = {
   overhead_value: 0
 };
 let currentActiveTab = 'tab-direktori';
-
-// ===== TOGGLE SIDEBAR =====
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    if (!sidebar) return;
-    const isHidden = sidebar.classList.contains('-translate-x-full');
-    if (isHidden) {
-        sidebar.classList.remove('-translate-x-full');
-        if (overlay) overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    } else {
-        sidebar.classList.add('-translate-x-full');
-        if (overlay) overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-    }
-}
-// Close sidebar on overlay click
-document.addEventListener('click', function(e) {
-    const overlay = document.getElementById('sidebar-overlay');
-    if (overlay && !overlay.classList.contains('hidden')) {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar && e.target === overlay) {
-            toggleSidebar();
-        }
-    }
-});
 
 // ===== TEMA =====
 let currentTheme = 'auto';
@@ -195,8 +164,17 @@ function getCardGradient(str) {
     return gradients[Math.abs(hash) % gradients.length];
 }
 function toggleMobileMenu() {
-    // Legacy function - now using sidebar
-    toggleSidebar();
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-overlay');
+    if (menu.classList.contains('translate-x-full')) {
+        menu.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+    } else {
+        menu.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+    }
 }
 function toggleKebabMenu(event, menuId) {
     event.stopPropagation();
@@ -260,6 +238,7 @@ async function fetchUserRoleAndSettings(user) {
         role = roleData.role;
     }
     currentUser = { id: user.id, email: user.email, role };
+    console.log('✅ User role set:', currentUser);
     await loadAppSettings();
     updateUIByRole();
     hideLoginScreen();
@@ -353,6 +332,7 @@ async function logoutAdmin() {
 function updateUIByRole() {
     const isLoggedIn = !!currentUser;
     const role = currentUser?.role || 'guest';
+    console.log('🔄 updateUIByRole - role:', role);
     
     const allTabs = ['tab-dashboard', 'tab-direktori', 'tab-hpp', 'tab-bahan-baku', 'tab-kategori', 'tab-data-penjualan', 'tab-discount-calculator', 'tab-settings'];
     const tabMap = {
@@ -367,7 +347,7 @@ function updateUIByRole() {
     const activeTab = allowed.includes(homeTab) ? homeTab : allowed[0];
     currentActiveTab = activeTab;
     
-    // Sembunyikan semua tab
+    // Sembunyikan semua tab, tampilkan yang diizinkan
     allTabs.forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.classList.add('hidden'); el.classList.remove('active'); }
@@ -379,8 +359,27 @@ function updateUIByRole() {
     const firstEl = document.getElementById(activeTab);
     if (firstEl) { firstEl.classList.add('active'); }
 
-    // Buat sidebar nav
-    const sidebarNav = document.getElementById('sidebar-nav');
+    // --- HAPUS bagian yang mengisi navbar-tabs ---
+    // Tidak ada lagi navbar-tabs, jadi kita hapus kode yang mengisinya.
+
+    // --- Hanya isi mobile menu list ---
+    const mobileMenuList = document.getElementById('mobile-menu-list');
+    mobileMenuList.innerHTML = '';
+    const statusDiv = document.createElement('div');
+    statusDiv.className = 'flex flex-col gap-3 pb-5 mb-3 border-b border-gray-100 dark:border-gray-700';
+    const statusSpan = document.createElement('span');
+    statusSpan.className = 'text-sm font-bold text-[#FF3B30] bg-[#FF3B30]/10 border border-[#FF3B30]/20 px-3 py-2 rounded-lg text-center shadow-inner';
+    statusSpan.innerText = isLoggedIn ? `🌟 ${role.toUpperCase()} (${currentUser.email})` : '👤 Guest';
+    statusDiv.appendChild(statusSpan);
+    if (isLoggedIn) {
+        const logoutBtn = document.createElement('button');
+        logoutBtn.className = 'bg-[#FF3B30] text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:shadow-lg transition-shadow text-center';
+        logoutBtn.innerText = 'Logout Admin';
+        logoutBtn.onclick = () => { toggleMobileMenu(); logoutAdmin(); };
+        statusDiv.appendChild(logoutBtn);
+    }
+    mobileMenuList.appendChild(statusDiv);
+
     const tabNames = {
         'tab-dashboard': '📈 Dashboard',
         'tab-direktori': '📑 Directory Menu',
@@ -391,36 +390,15 @@ function updateUIByRole() {
         'tab-discount-calculator': '🧮 Discount Calculator',
         'tab-settings': '⚙️ Settings'
     };
-    sidebarNav.innerHTML = '';
     allowed.forEach(id => {
-        const btn = document.createElement('div');
-        btn.className = `sidebar-nav-item ${id === activeTab ? 'active' : ''}`;
+        const btn = document.createElement('button');
+        btn.className = `btn-tab-mobile text-gray-600 dark:text-gray-300 font-semibold text-left py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${id === activeTab ? 'bg-blue-50 dark:bg-blue-900/20 text-[#FF3B30] font-bold' : ''}`;
         btn.innerText = tabNames[id] || id;
-        btn.onclick = () => { 
-            switchTab(id); 
-            // Tutup sidebar di mobile setelah klik
-            if (window.innerWidth < 1024) {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebar-overlay');
-                if (sidebar) sidebar.classList.add('-translate-x-full');
-                if (overlay) overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        };
-        sidebarNav.appendChild(btn);
+        btn.onclick = () => { switchTab(id); toggleMobileMenu(); };
+        mobileMenuList.appendChild(btn);
     });
 
-    // Update user status di sidebar
-    const userStatus = document.getElementById('user-status-sidebar');
-    if (isLoggedIn) {
-        userStatus.innerHTML = `🌟 ${role.toUpperCase()}`;
-        userStatus.className = 'text-xs font-bold text-[#FF3B30] bg-[#FF3B30]/10 px-3 py-1.5 rounded-full inline-block border border-[#FF3B30]/20';
-    } else {
-        userStatus.innerHTML = '👤 Guest';
-        userStatus.className = 'text-xs font-bold text-gray-400 bg-gray-700 px-3 py-1.5 rounded-full inline-block border border-gray-600';
-    }
-
-    // Role-based visibility
+    // Role-based visibility untuk elemen lainnya
     document.querySelectorAll('.role-admin').forEach(el => el.classList.toggle('hidden', !hasRole('admin')));
     document.querySelectorAll('.role-senior').forEach(el => el.classList.toggle('hidden', !hasRole('senior_bar')));
     document.querySelectorAll('.role-head').forEach(el => el.classList.toggle('hidden', !hasRole('head_bar')));
@@ -434,7 +412,15 @@ function updateUIByRole() {
         }
     }
 
-    // Isi settings
+    const userStatus = document.getElementById('user-status');
+    if (isLoggedIn) {
+        userStatus.innerHTML = `🌟 ${role.toUpperCase()}`;
+        userStatus.className = 'text-xs font-bold text-[#FF3B30] bg-[#FF3B30]/10 px-3 py-1.5 rounded-full shadow-inner border border-[#FF3B30]/20';
+    } else {
+        userStatus.innerHTML = '👤 Guest';
+        userStatus.className = 'text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-gray-600';
+    }
+
     document.getElementById('setting-hpp-limit').value = appSettings.hpp_limit;
     setOverheadType(appSettings.overhead_type);
     if (appSettings.overhead_type === 'nominal') {
@@ -449,11 +435,8 @@ function updateUIByRole() {
     loadMenuDropdownPenjualan();
     populateKategoriFilterPenjualan();
     populateDiscountDropdowns();
-
-    // Load kategori
     loadKategoriDB();
 
-    // Restore tab
     const savedTab = sessionStorage.getItem('activeTab');
     if (savedTab && allowed.includes(savedTab)) {
         switchTab(savedTab);
@@ -461,7 +444,6 @@ function updateUIByRole() {
         switchTab(activeTab);
     }
 
-    // Load data
     if (document.getElementById('tab-bahan-baku').classList.contains('active')) {
         bbCurrentPage = 1;
         loadBahanBaku();
@@ -483,17 +465,8 @@ function switchTab(tabId) {
         target.classList.remove('hidden');
         target.classList.add('active');
     }
-    
-    // Update sidebar active state
-    document.querySelectorAll('.sidebar-nav-item').forEach(el => {
-        el.classList.remove('active');
-    });
-    const activeNav = Array.from(document.querySelectorAll('.sidebar-nav-item')).find(el => {
-        const onclickAttr = el.getAttribute('onclick');
-        return onclickAttr && onclickAttr.includes(`'${tabId}'`);
-    });
-    if (activeNav) activeNav.classList.add('active');
-    
+    // Tidak ada navbar-tabs, jadi tidak perlu update active state di nav.
+    // Namun untuk konsistensi, kita tetap bisa update mobile menu jika perlu.
     currentActiveTab = tabId;
     try { sessionStorage.setItem('activeTab', tabId); } catch(e) {}
 
@@ -522,7 +495,7 @@ function switchTab(tabId) {
     }
     if (tabId === 'tab-discount-calculator') {
         populateDiscountDropdowns();
-        calculateDiscount();
+        calculateDiscount(); // auto calculate on tab switch
     }
 }
 
@@ -533,19 +506,20 @@ document.addEventListener('DOMContentLoaded', function() {
         brandLink.addEventListener('click', function(e) {
             if (document.getElementById('login-overlay').classList.contains('hidden') === false) return;
             switchTab('tab-direktori');
-            document.querySelectorAll('.sidebar-nav-item').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.innerText.includes('Directory Menu')) {
-                    btn.classList.add('active');
-                }
-            });
-            // Tutup sidebar di mobile
-            if (window.innerWidth < 1024) {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebar-overlay');
-                if (sidebar) sidebar.classList.add('-translate-x-full');
-                if (overlay) overlay.classList.add('hidden');
-                document.body.style.overflow = '';
+            // Update mobile menu active state (optional)
+            const mobileMenuList = document.getElementById('mobile-menu-list');
+            if (mobileMenuList) {
+                const btns = mobileMenuList.querySelectorAll('.btn-tab-mobile');
+                btns.forEach(btn => {
+                    btn.classList.remove('bg-blue-50', 'dark:bg-blue-900/20', 'text-[#FF3B30]', 'font-bold');
+                    if (btn.innerText.includes('Directory Menu')) {
+                        btn.classList.add('bg-blue-50', 'dark:bg-blue-900/20', 'text-[#FF3B30]', 'font-bold');
+                    }
+                });
+            }
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (!mobileMenu.classList.contains('translate-x-full')) {
+                toggleMobileMenu();
             }
         });
     }
@@ -721,11 +695,14 @@ async function loadKategoriDB() {
     if (!error && data) {
         listKategori = data.filter(d => d.jenis === 'Kategori');
         listSubKategori = data.filter(d => d.jenis === 'Sub-Kategori');
+        console.log('📂 Kategori dimuat:', listKategori.length, 'Sub:', listSubKategori.length);
         renderDropdownKategori();
         renderTabelManajemenKategori();
         populateFilterKategoriDirektori();
         populateKategoriFilterPenjualan();
         populateDiscountDropdowns();
+    } else {
+        console.error('❌ Gagal load kategori:', error);
     }
 }
 function renderDropdownKategori() {
@@ -756,7 +733,10 @@ function renderTabelManajemenKategori() {
     const ulKat = document.getElementById('list-manajemen-kategori');
     const ulSub = document.getElementById('list-manajemen-sub-kategori');
     if (!ulKat || !ulSub) return;
+
     const canEdit = hasRole('senior_bar');
+    console.log('🔧 renderTabelManajemenKategori - canEdit:', canEdit, 'role:', currentUser?.role);
+    
     const generateHTML = (list, jenis) => {
         if (list.length === 0) return `<li class="text-sm text-gray-400 dark:text-gray-500 italic p-3 text-center border border-dashed rounded-lg">Belum ada data</li>`;
         return list.map(k => `
@@ -1167,6 +1147,7 @@ async function loadDirektori() {
     if (document.getElementById('tab-data-penjualan').classList.contains('active')) {
         renderTablePenjualanInput();
     }
+    // Refresh discount calculator if active
     if (document.getElementById('tab-discount-calculator').classList.contains('active')) {
         calculateDiscount();
     }
@@ -2197,6 +2178,7 @@ function populateDiscountDropdowns() {
     const subSelect = document.getElementById('discount-subcategory');
     if (!catSelect || !subSelect) return;
 
+    // Kategori
     const currentCat = catSelect.value;
     catSelect.innerHTML = '<option value="all">Semua Kategori</option>';
     listKategori.forEach(k => {
@@ -2204,6 +2186,7 @@ function populateDiscountDropdowns() {
     });
     catSelect.value = currentCat;
 
+    // Sub Kategori
     const currentSub = subSelect.value;
     subSelect.innerHTML = '<option value="all">Semua Sub-Kategori</option>';
     listSubKategori.forEach(k => {
@@ -2245,6 +2228,7 @@ function calculateDiscount() {
         totalDiscRev += discPrice;
         if (marginLoss > 0) totalMarginLoss += marginLoss;
 
+        // Warna
         let marginAfterColor = '';
         if (marginAfter < 0) marginAfterColor = 'text-red-600 dark:text-red-400 font-bold';
         else if (marginAfter > 0) marginAfterColor = 'text-emerald-600 dark:text-emerald-400 font-bold';
