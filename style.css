@@ -1,4 +1,4 @@
-/* style.css - FULL VERSION with contrast fixes for dark theme */
+/* style.css - FULL VERSION with all fixes */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -1026,39 +1026,32 @@ body {
 }
 
 /* ================================================================
-   BRAND (F&B PRO) AND RECIPE CARD NAMES - ALWAYS WHITE
+   NAVBAR BACKGROUND SELALU HITAM DI SEMUA TEMA
    ================================================================ */
-#brand-link h1 {
-    color: #ffffff !important;
+nav,
+nav .bg-white\/90,
+nav .bg-white\/80,
+nav .bg-white {
+    background-color: #0f172a !important;
 }
-#recipe-wrapper .bg-gradient-to-br h3 {
-    color: #ffffff !important;
-}
-.light #brand-link h1 {
-    color: #0f172a !important;
-    background: none !important;
-    -webkit-text-fill-color: #0f172a !important;
-}
-.light #recipe-wrapper .bg-gradient-to-br h3 {
-    color: #ffffff !important;
+nav .border-gray-200,
+nav .border-b {
+    border-color: #1e293b !important;
 }
 
 /* ================================================================
-   NAVBAR DARK THEME - GELAP
+   F&B PRO TEXT SELALU PUTIH DI SEMUA TEMA
    ================================================================ */
-.dark nav {
-    background-color: #0f172a !important;
-    border-bottom-color: #1e293b !important;
+#brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-clip: unset !important;
 }
-.dark nav .bg-white\/90 {
-    background-color: #0f172a !important;
-}
-.dark nav .border-gray-200 {
-    border-color: #1e293b !important;
-}
-.dark nav .bg-white\/80 {
-    background-color: #0f172a !important;
-}
+
+/* ================================================================
+   NAVBAR DARK THEME - GELAP (sudah ditangani di atas)
+   ================================================================ */
 
 /* ================================================================
    ACTIVE TAB TEXT - HITAM DI TEMA GELAP
@@ -1204,22 +1197,4 @@ body {
 .light .bg-gradient-to-r.from-amber-50 .border-amber-300,
 .dark .bg-gradient-to-r.from-amber-50 .border-amber-300 {
     border-color: #94a3b8 !important;
-}
-
-/* ================================================================
-   F&B PRO - PUTIH DI TEMA GELAP
-   ================================================================ */
-.dark #brand-link h1 {
-    color: #ffffff !important;
-    background: none !important;
-    -webkit-text-fill-color: #ffffff !important;
-    background-clip: unset !important;
-}
-
-/* Tema terang - F&B PRO tetap hitam */
-.light #brand-link h1 {
-    color: #0f172a !important;
-    background: none !important;
-    -webkit-text-fill-color: #0f172a !important;
-    background-clip: unset !important;
 }
