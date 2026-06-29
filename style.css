@@ -1146,3 +1146,80 @@ body {
 .light .role-head.hidden {
     display: none !important;
 }
+
+/* ================================================================
+   TEKS KHUSUS TETAP HITAM DI SEMUA TEMA
+   ================================================================ */
+/* "Import/Export Resep" - di tab HPP */
+.light .bg-gradient-to-r.from-blue-50 .font-bold.text-blue-800,
+.dark .bg-gradient-to-r.from-blue-50 .font-bold.text-blue-800,
+.light .bg-gradient-to-r.from-blue-50 .text-blue-800,
+.dark .bg-gradient-to-r.from-blue-50 .text-blue-800 {
+    color: #0f172a !important;
+}
+
+/* "Sistem Import Cerdas" - di tab Bahan Baku */
+.light .bg-gradient-to-r.from-green-50 .font-bold.text-green-800,
+.dark .bg-gradient-to-r.from-green-50 .font-bold.text-green-800,
+.light .bg-gradient-to-r.from-green-50 .text-green-800,
+.dark .bg-gradient-to-r.from-green-50 .text-green-800 {
+    color: #0f172a !important;
+}
+
+/* "Integrasi Kategori Master" - di tab Kategori */
+.light .bg-gradient-to-r.from-purple-50 .font-bold.text-purple-800,
+.dark .bg-gradient-to-r.from-purple-50 .font-bold.text-purple-800,
+.light .bg-gradient-to-r.from-purple-50 .text-purple-800,
+.dark .bg-gradient-to-r.from-purple-50 .text-purple-800 {
+    color: #0f172a !important;
+}
+
+/* "Import/Export Penjualan" - di tab Data Penjualan */
+.light .bg-gradient-to-r.from-amber-50 .font-bold.text-amber-800,
+.dark .bg-gradient-to-r.from-amber-50 .font-bold.text-amber-800,
+.light .bg-gradient-to-r.from-amber-50 .text-amber-800,
+.dark .bg-gradient-to-r.from-amber-50 .text-amber-800 {
+    color: #0f172a !important;
+}
+
+/* Deskripsi di bawah judul tersebut (teks kecil) */
+.light .bg-gradient-to-r.from-blue-50 .text-sm,
+.dark .bg-gradient-to-r.from-blue-50 .text-sm,
+.light .bg-gradient-to-r.from-green-50 .text-sm,
+.dark .bg-gradient-to-r.from-green-50 .text-sm,
+.light .bg-gradient-to-r.from-purple-50 .text-sm,
+.dark .bg-gradient-to-r.from-purple-50 .text-sm,
+.light .bg-gradient-to-r.from-amber-50 .text-sm,
+.dark .bg-gradient-to-r.from-amber-50 .text-sm {
+    color: #0f172a !important;
+}
+
+/* Pastikan tombol di dalam area tersebut tetap terlihat */
+.light .bg-gradient-to-r.from-blue-50 .border-blue-300,
+.dark .bg-gradient-to-r.from-blue-50 .border-blue-300,
+.light .bg-gradient-to-r.from-green-50 .border-green-300,
+.dark .bg-gradient-to-r.from-green-50 .border-green-300,
+.light .bg-gradient-to-r.from-purple-50 .border-purple-300,
+.dark .bg-gradient-to-r.from-purple-50 .border-purple-300,
+.light .bg-gradient-to-r.from-amber-50 .border-amber-300,
+.dark .bg-gradient-to-r.from-amber-50 .border-amber-300 {
+    border-color: #94a3b8 !important;
+}
+
+/* ================================================================
+   F&B PRO - PUTIH DI TEMA GELAP
+   ================================================================ */
+.dark #brand-link h1 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background-clip: unset !important;
+}
+
+/* Tema terang - F&B PRO tetap hitam */
+.light #brand-link h1 {
+    color: #0f172a !important;
+    background: none !important;
+    -webkit-text-fill-color: #0f172a !important;
+    background-clip: unset !important;
+}
