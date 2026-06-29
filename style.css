@@ -1,4 +1,4 @@
-/* style.css - FULL VERSION with navbar dark, active tab black text in dark, and overhead badge black text */
+/* style.css - FULL VERSION */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -31,7 +31,7 @@
     width: 100%;
 }
 .dark .btn-tab.active {
-    color: #000000 !important; /* hitam di tema gelap */
+    color: #000000 !important;
 }
 .dark .btn-tab.active::after {
     background-color: #000000 !important;
@@ -1026,26 +1026,38 @@ body {
 }
 
 /* ================================================================
-   BRAND (F&B PRO) AND RECIPE CARD NAMES - ALWAYS WHITE
+   BRAND TEXT - HITAM DI TERANG, PUTIH DI GELAP
    ================================================================ */
 #brand-link h1 {
-    color: #ffffff !important;
-}
-#recipe-wrapper .bg-gradient-to-br h3 {
-    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
 }
 .light #brand-link h1 {
-    color: #ffffff !important;
-    background: none !important;
-    -webkit-text-fill-color: #ffffff !important;
+    color: #0f172a !important;
 }
-.light #recipe-wrapper .bg-gradient-to-br h3 {
+.dark #brand-link h1 {
+    color: #ffffff !important;
+}
+
+/* Recipe card names - always white */
+#recipe-wrapper .bg-gradient-to-br h3 {
     color: #ffffff !important;
 }
 
 /* ================================================================
-   NAVBAR DARK THEME - GELAP
+   NAVBAR BACKGROUND - TERANG DI LIGHT, GELAP DI DARK
    ================================================================ */
+.light nav {
+    background-color: #ffffff !important;
+    border-bottom-color: #e2e8f0 !important;
+}
+.light nav .bg-white\/90 {
+    background-color: #ffffff !important;
+}
+.light nav .border-gray-200 {
+    border-color: #e2e8f0 !important;
+}
 .dark nav {
     background-color: #0f172a !important;
     border-bottom-color: #1e293b !important;
@@ -1056,12 +1068,9 @@ body {
 .dark nav .border-gray-200 {
     border-color: #1e293b !important;
 }
-.dark nav .bg-white\/80 {
-    background-color: #0f172a !important;
-}
 
 /* ================================================================
-   ACTIVE TAB TEXT - HITAM DI TEMA GELAP
+   ACTIVE TAB - HITAM DI DARK THEME
    ================================================================ */
 .dark .btn-tab.active {
     color: #000000 !important;
@@ -1069,8 +1078,6 @@ body {
 .dark .btn-tab.active::after {
     background-color: #000000 !important;
 }
-
-/* Mobile menu active tab */
 .dark .btn-tab-mobile.bg-blue-50 {
     background-color: #e2e8f0 !important;
     color: #000000 !important;
@@ -1087,42 +1094,11 @@ body {
 }
 
 /* ================================================================
-   SETTINGS - ALL USERS CAN ACCESS THEME, ONLY HEAD CAN ACCESS OTHERS
+   SETTINGS ROLE VISIBILITY
    ================================================================ */
 .role-head.hidden {
     display: none !important;
 }
 .light .role-head.hidden {
     display: none !important;
-}
-
-/* Tambahkan di bagian akhir style.css */
-
-/* ================================================================
-   FIX: BRAND TEXT COLOR IN LIGHT THEME (HITAM)
-   ================================================================ */
-.light #brand-link h1 {
-    color: #0f172a !important;
-    background: none !important;
-    -webkit-text-fill-color: #0f172a !important;
-    background-clip: unset !important;
-}
-
-/* Pastikan di dark theme tetap putih */
-.dark #brand-link h1 {
-    color: #ffffff !important;
-    background: none !important;
-    -webkit-text-fill-color: #ffffff !important;
-}
-
-/* Navbar background di light theme - terang */
-.light nav {
-    background-color: #ffffff !important;
-    border-bottom-color: #e2e8f0 !important;
-}
-.light nav .bg-white\/90 {
-    background-color: #ffffff !important;
-}
-.light nav .border-gray-200 {
-    border-color: #e2e8f0 !important;
 }
