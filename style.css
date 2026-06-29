@@ -1,4 +1,4 @@
-/* style.css - FINAL VERSION */
+/* style.css - FULL VERSION */
 .tab-content { 
     display: none; 
     animation: fadeIn 0.3s ease-in-out;
@@ -994,7 +994,6 @@ body {
 /* ================================================================
    WHITE HEADER DESCRIPTIONS (both themes)
    ================================================================ */
-/* Main header description (e.g., "Manajemen harga pasar komoditas...") */
 .bg-gradient-to-r .text-sm.opacity-90,
 .bg-gradient-to-r p {
     color: #ffffff !important;
@@ -1016,12 +1015,11 @@ body {
 .light .bg-gradient-to-r.from-amber-50 .text-sm {
     color: #0f172a !important;
 }
-/* But keep the bold title (e.g., "Sistem Import Cerdas") white or colored as per original */
 .light .bg-gradient-to-r.from-blue-50 .font-bold,
 .light .bg-gradient-to-r.from-purple-50 .font-bold,
 .light .bg-gradient-to-r.from-green-50 .font-bold,
 .light .bg-gradient-to-r.from-amber-50 .font-bold {
-    color: #1e3a5f !important; /* dark blue for light theme, adjust as needed */
+    color: #1e3a5f !important;
 }
 .dark .bg-gradient-to-r.from-blue-50 .font-bold,
 .dark .bg-gradient-to-r.from-purple-50 .font-bold,
@@ -1039,7 +1037,6 @@ body {
 #recipe-wrapper .bg-gradient-to-br h3 {
     color: #ffffff !important;
 }
-/* Override any light theme rule that might change it */
 .light #brand-link h1 {
     color: #ffffff !important;
     background: none !important;
@@ -1048,3 +1045,18 @@ body {
 .light #recipe-wrapper .bg-gradient-to-br h3 {
     color: #ffffff !important;
 }
+
+/* ================================================================
+   SETTINGS - ALL USERS CAN ACCESS THEME, ONLY HEAD CAN ACCESS OTHERS
+   ================================================================ */
+.role-head.hidden {
+    display: none !important;
+}
+.light .role-head.hidden {
+    display: none !important;
+}
+/* But when user is head_bar, show those sections */
+.has-role-head .role-head.hidden {
+    display: block !important;
+}
+/* We handle visibility via JavaScript, so these rules are fallback */
