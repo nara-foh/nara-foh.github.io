@@ -260,4 +260,92 @@ export function loadTheme() {
     const btns = document.querySelectorAll('.theme-btn');
     if (btns[btnMap[theme]]) {
         const btn = btns[btnMap[theme]];
-        btn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark
+        btn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+        btn.classList.add('bg-[#FF3B30]', 'text-white', 'border-[#FF3B30]');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (currentTheme === 'auto') applyTheme('auto');
+    });
+}
+
+export function applyTheme(theme) {
+    const html = document.documentElement;
+    if (theme === 'auto') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        html.classList.toggle('dark', prefersDark);
+        currentTheme = 'auto';
+        const status = document.getElementById('theme-status');
+        if (status) status.innerHTML = `Tema aktif: <span class="font-bold text-[#FF3B30]">Otomatis (${prefersDark ? 'Gelap' : 'Terang'})</span>`;
+    } else if (theme === 'dark') {
+        html.classList.add('dark');
+        currentTheme = 'dark';
+        const status = document.getElementById('theme-status');
+        if (status) status.innerHTML = `Tema aktif: <span class="font-bold text-[#FF3B30]">Gelap</span>`;
+    } else {
+        html.classList.remove('dark');
+        currentTheme = 'light';
+        const status = document.getElementById('theme-status');
+        if (status) status.innerHTML = `Tema aktif: <span class="font-bold text-[#FF3B30]">Terang</span>`;
+    }
+    try { localStorage.setItem('preferred-theme', theme); } catch(e) {}
+}
+
+export function setTheme(theme) {
+    applyTheme(theme);
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('bg-[#FF3B30]', 'text-white', 'border-[#FF3B30]');
+        btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    });
+    const btnMap = { light: 0, dark: 1, auto: 2 };
+    const btns = document.querySelectorAll('.theme-btn');
+    if (btns[btnMap[theme]]) {
+        const btn = btns[btnMap[theme]];
+        btn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+        btn.classList.add('bg-[#FF3B30]', 'text-white', 'border-[#FF3B30]');
+    }
+}
+
+// ===== OVERHEAD UI =====
+export function toggleOverheadInputStyle() {
+    const type = document.getElementById('setting-overhead-type').value;
+    const symbol = document.getElementById('overhead-addon-symbol');
+    const input = document.getElementById('setting-overhead');
+    const helper = document.getElementById('overhead-helper-text');
+    document.querySelectorAll('.overhead-type-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    if (type === 'persen') {
+        symbol.innerText = '%';
+        input.placeholder = 'ex: 5';
+        if (helper) helper.innerText = 'Contoh: jika diisi 5, maka HPP bahan akan ditambah 5% dari nilainya sebagai biaya overhead.';
+    } else {
+        symbol.innerText = 'Rp';
+        input.placeholder = '0';
+        if (helper) helper.innerText = 'Nilai ini akan ditambahkan secara tetap (flat) ke HPP setiap porsi resep.';
+    }
+}
+
+export function setOverheadType(type) {
+    document.getElementById('setting-overhead-type').value = type;
+    toggleOverheadInputStyle();
+}
+
+export function updateOverheadStatusBadge() {
+    const badge = document.getElementById('overhead-status-badge');
+    if (!badge) return;
+    if (appSettings.overhead_value > 0) {
+        const display = appSettings.overhead_type === 'persen'
+            ? `${appSettings.overhead_value}% / porsi`
+            : `${formatRp(appSettings.overhead_value)} / porsi`;
+        badge.innerHTML = `✅ Tersimpan: ${display}`;
+        badge.className = 'text-xs font-bold px-3 py-1.5 rounded-full border bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 shadow-sm whitespace-nowrap';
+    } else {
+        badge.innerHTML = `⚪ Belum diatur`;
+        badge.className = 'text-xs font-bold px-3 py-1.5 rounded-full border bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-600 shadow-sm whitespace-nowrap';
+    }
+}
+
+export function handleOverheadInputFormatting(element) {
+    const type = document.getElementById('setting-overhead-type').value;
+    if (type === 'nominal') formatRupiahInput(element);
+}
