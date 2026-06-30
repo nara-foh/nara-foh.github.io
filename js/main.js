@@ -1,11 +1,17 @@
 // main.js
 import { initSupabase, currentUser, currentActiveTab, bahanBakuList, listKategori, listSubKategori, cachedResepSummaryData } from './config.js';
-import { inisialisasiAuth } from './auth.js';
+import { inisialisasiAuth, loginAdmin, logoutAdmin } from './auth.js';
 import { loadTheme, updateUIByRole, switchTab, toggleMobileMenu } from './ui.js';
 import { loadKategoriDB } from './kategori.js';
 import { loadBahanBaku } from './bahanBaku.js';
 import { loadDirektori } from './resep.js';
 import { loadDataPenjualan } from './penjualan.js';
+
+// Expose functions to window for HTML onclick handlers
+window.loginAdmin = loginAdmin;
+window.logoutAdmin = logoutAdmin;
+window.switchTab = switchTab;
+window.toggleMobileMenu = toggleMobileMenu;
 
 export async function initApp() {
     initSupabase();
