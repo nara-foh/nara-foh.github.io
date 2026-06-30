@@ -201,12 +201,13 @@
                                     <tbody id="temp-komposisi-list" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
                                 </table>
                             </div>
-                            <div class="bg-gray-800 dark:bg-gray-900 text-white p-4 text-sm space-y-2 mt-3 rounded-lg">
-                                <div class="flex justify-between"><span class="text-gray-300">Total HPP / Porsi:</span> <span id="r-total-cost" class="font-black text-lg text-white">Rp 0</span></div>
-                                <div class="flex justify-between border-t border-gray-600 pt-2"><span class="text-gray-300">Harga Jual:</span> <span id="r-target-jual" class="font-bold text-blue-300">Rp 0</span></div>
-                                <div class="flex justify-between"><span class="text-gray-300">Margin:</span> <span id="r-margin" class="font-bold text-emerald-400">Rp 0</span></div>
-                                <div class="flex justify-between"><span class="text-gray-300">% HPP:</span> <span id="r-persentase" class="font-black text-lg text-emerald-400">0%</span></div>
-                            </div>
+                            <!-- di dalam div dengan id="tab-hpp", bagian input baru -->
+<div class="bg-gray-800 dark:bg-gray-900 text-white p-4 text-sm space-y-2 mt-3 rounded-lg">
+    <div class="flex justify-between"><span class="text-gray-300">Total HPP / Porsi:</span> <span id="r-total-cost" class="font-black text-lg text-white">Rp 0</span></div>
+    <div class="flex justify-between border-t border-gray-600 pt-2"><span class="text-gray-300">Harga Jual:</span> <span id="r-target-jual" class="font-bold text-blue-600 dark:text-blue-400">Rp 0</span></div>
+    <div class="flex justify-between"><span class="text-gray-300">Margin:</span> <span id="r-margin" class="font-bold text-emerald-400">Rp 0</span></div>
+    <div class="flex justify-between"><span class="text-gray-300">% HPP:</span> <span id="r-persentase" class="font-black text-lg text-emerald-400">0%</span></div>
+</div>
                             <button onclick="simpanResepFinal()" class="role-senior hidden mt-4 w-full bg-[#FF3B30] text-white py-3 rounded-xl font-bold text-lg hover:bg-[#e0352a] shadow-lg transition-transform hover:-translate-y-1">Simpan Resep</button>
                         </div>
                     </div>
