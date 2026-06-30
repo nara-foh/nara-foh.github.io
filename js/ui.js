@@ -1,9 +1,9 @@
 import { currentUser, appSettings, currentTheme } from './config.js';
 import { hasRole, getCurrentUser, logoutAdmin } from './auth.js';
 import { loadBahanBaku, renderTabelBahanBaku } from './bahanBaku.js';
-import { loadKategoriDB, renderTabelManajemenKategori, populateDiscountDropdowns } from './kategori.js';
+import { loadKategoriDB, renderTabelManajemenKategori, populateDiscountDropdowns, populateKategoriFilterPenjualan } from './kategori.js';
 import { loadDirektori, renderTableSummary } from './resep.js';
-import { loadDataPenjualan, renderTablePenjualanInput, initBulanTahunDropdowns, loadMenuDropdownPenjualan, populateKategoriFilterPenjualan } from './penjualan.js';
+import { loadDataPenjualan, renderTablePenjualanInput, initBulanTahunDropdowns, loadMenuDropdownPenjualan } from './penjualan.js';
 import { updateDashboardEngineering } from './dashboard.js';
 
 // ===== UI HELPERS =====
