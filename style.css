@@ -1264,3 +1264,16 @@ nav .border-b {
 .dark .bg-white.text-gray-700 {
     color: #ffffff !important;
 }
+
+.light .text-emerald-600 {
+    color: #059669 !important;  /* hijau tua */
+}
+.light .text-red-600 {
+    color: #dc2626 !important;  /* merah */
+}
+.light .text-emerald-400 {
+    color: #34d399 !important;
+}
+.light .text-red-500 {
+    color: #ef4444 !important;
+}
