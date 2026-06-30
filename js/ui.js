@@ -1,10 +1,9 @@
 import { currentUser, appSettings, currentTheme } from './config.js';
 import { hasRole, getCurrentUser, logoutAdmin } from './auth.js';
 import { loadBahanBaku, renderTabelBahanBaku } from './bahanBaku.js';
-import { loadKategoriDB, renderTabelManajemenKategori } from './kategori.js';
+import { loadKategoriDB, renderTabelManajemenKategori, populateDiscountDropdowns } from './kategori.js';
 import { loadDirektori, renderTableSummary } from './resep.js';
 import { loadDataPenjualan, renderTablePenjualanInput, initBulanTahunDropdowns, loadMenuDropdownPenjualan, populateKategoriFilterPenjualan } from './penjualan.js';
-import { populateDiscountDropdowns } from './discount.js';
 import { updateDashboardEngineering } from './dashboard.js';
 
 // ===== UI HELPERS =====
@@ -184,7 +183,7 @@ export function updateUIByRole() {
     };
     allowed.forEach(id => {
         const btn = document.createElement('button');
-        btn.className = `btn-tab-mobile text-gray-600 dark:text-gray-300 font-semibold text-left py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${id === activeTab ? 'bg-blue-50 dark:bg-blue-900/20 text-[#FF3B30] font-bold' : ''}`;
+        btn.className = `btn-tab-mobile text-gray-600 dark:text-gray-300 font-semibold text-left py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${id === activeTab ? 'bg-[#FF3B30]/10 text-[#FF3B30] border-l-4 border-[#FF3B30]' : ''}`;
         btn.innerText = tabNames[id] || id;
         btn.onclick = () => { switchTab(id); toggleMobileMenu(); };
         mobileMenuList.appendChild(btn);
