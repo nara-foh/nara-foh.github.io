@@ -1,27 +1,19 @@
+// main.js
 import { initSupabase, currentUser, currentActiveTab, bahanBakuList, listKategori, listSubKategori, cachedResepSummaryData } from './config.js';
 import { inisialisasiAuth } from './auth.js';
-import { loadTheme, updateUIByRole, switchTab } from './ui.js';
+import { loadTheme, updateUIByRole, switchTab, toggleMobileMenu } from './ui.js';
 import { loadKategoriDB } from './kategori.js';
 import { loadBahanBaku } from './bahanBaku.js';
 import { loadDirektori } from './resep.js';
 import { loadDataPenjualan } from './penjualan.js';
 
-// ===== MAIN ENTRY POINT =====
 export async function initApp() {
-    // Inisialisasi Supabase
     initSupabase();
-
-    // Load tema
     loadTheme();
-
-    // Inisialisasi auth (login/logout)
     await inisialisasiAuth();
-
-    // Load data awal
     await loadKategoriDB();
     await loadBahanBaku();
 
-    // Set default filter untuk penjualan
     const bulanNow = new Date().getMonth() + 1;
     const tahunNow = new Date().getFullYear();
     const bulanFilter = document.getElementById('filter-data-bulan');
@@ -29,11 +21,9 @@ export async function initApp() {
     if (bulanFilter) bulanFilter.value = bulanNow;
     if (tahunFilter) tahunFilter.value = tahunNow;
 
-    // Restore tab terakhir
     const savedTab = sessionStorage.getItem('activeTab');
     if (savedTab && document.getElementById(savedTab)) {
-        // Cek apakah tab diizinkan untuk user saat ini (updateUIByRole akan handle)
-        // switchTab akan dipanggil di updateUIByRole
+        // akan di-handle di updateUIByRole
     }
 
     // Event listener untuk click di luar dropdown
@@ -44,7 +34,7 @@ export async function initApp() {
     });
 
     // Event listener untuk sort pada summary table
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', async function(e) {  // <--- tambahkan async
         const th = e.target.closest('.sortable');
         if (th && th.closest('#summary-table')) {
             const key = th.dataset.sort;
@@ -63,7 +53,7 @@ export async function initApp() {
     });
 
     // Event listener untuk sort pada discount table
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', async function(e) {  // <--- tambahkan async
         const th = e.target.closest('.sortable-disc');
         if (th && th.closest('#discount-table')) {
             const key = th.dataset.sort;
@@ -87,7 +77,6 @@ export async function initApp() {
         brandLink.addEventListener('click', function(e) {
             if (document.getElementById('login-overlay').classList.contains('hidden') === false) return;
             switchTab('tab-direktori');
-            // Update mobile menu active state
             const mobileMenuList = document.getElementById('mobile-menu-list');
             if (mobileMenuList) {
                 const btns = mobileMenuList.querySelectorAll('.btn-tab-mobile');
@@ -126,10 +115,8 @@ export async function initApp() {
     });
 }
 
-// Auto-init when DOM ready
+// Auto-init if not called from index
 document.addEventListener('DOMContentLoaded', function() {
-    // Function will be called from index.html via script tag with type="module"
-    // But we also call it here for safety
     if (window.initApp) {
         window.initApp();
     }
